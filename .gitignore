@@ -1,0 +1,21 @@
+# macOS
+.DS_Store
+
+# Project-local agent installations; distributable source lives in skills/
+.agents/skills/
+.pi/skills/
+.claude/skills/
+.codex/skills/
+
+# Dependencies and local configuration
+node_modules/
+.env
+.env.*
+!.env.example
+
+# Generated sample verification artifacts
+/samples/papyra/evidence/
+
+# Python script cache
+__pycache__/
+*.pyc
