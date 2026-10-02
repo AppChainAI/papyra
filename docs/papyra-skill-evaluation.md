@@ -12,11 +12,13 @@
 
 | 场景 | 输入 | HTML | 首轮 → 本轮体积 |
 | --- | --- | --- | --- |
-| 市场运营 | [原文](../samples/market-operations.md) | [运营复盘阅读页](../samples/papyra/market-operations.html) | 22,504 → 19,970 字节 |
-| 需求开发 | [原文](../samples/requirements-development.md) | [技术规格阅读页](../samples/papyra/requirements-development.html) | 22,835 → 20,884 字节 |
-| 设计方案 | [原文](../samples/design-proposal.md) | [空间方案阅读页](../samples/papyra/design-proposal.html) | 24,596 → 22,532 字节 |
+| 市场运营 | [原文](../samples/market-operations.md) | 运营复盘阅读页（已删除） | 22,504 → 19,970 字节 |
+| 需求开发 | [原文](../samples/requirements-development.md) | 技术规格阅读页（已删除） | 22,835 → 20,884 字节 |
+| 设计方案 | [原文](../samples/design-proposal.md) | 空间方案阅读页（已删除） | 24,596 → 22,532 字节 |
 
-业务内容和数字均为虚构样本。原始 Markdown 未修改，输入 SHA-256 记录在本地 `samples/papyra/evidence/checks.json`。三个 HTML 均为单文件，系统字体、样式和脚本内嵌，无外部请求。
+业务内容和数字均为虚构样本。原始 Markdown 未修改。三个 HTML 均为单文件，系统字体、样式和脚本内嵌，无外部请求。
+
+> 本文记录的是 0.1.1 轮评估。该轮产物（`samples/papyra/` 下的 HTML、检查脚本与 evidence）在 0.2.0 样本整理中从工作区删除，可从 git 历史恢复：HTML 与 check.mjs 见提交 c063b17，evidence 当时未纳入 Git，不可恢复。
 
 ## Skill 优化
 
@@ -57,7 +59,7 @@
 
 ## 浏览器验收
 
-使用本机 Chrome 无头浏览器，通过 `file://` 打开，Playwright 上下文禁用网络。检查脚本在 [samples/papyra/check.mjs](../samples/papyra/check.mjs)。三个页面均通过：
+使用本机 Chrome 无头浏览器，通过 `file://` 打开，Playwright 上下文禁用网络。检查脚本为 `samples/papyra/check.mjs`（已随产物删除，见提交 c063b17）。三个页面均通过：
 
 - 排除新增增强后，原文标题、段落、列表、表格、代码及限制文字与 Markdown 渲染结果一致；文字一致不替代语义检查。
 - 外部 HTTP 请求 0，JavaScript 异常 0，页内链接目标存在；源文件检查前后哈希不变。
@@ -84,7 +86,7 @@
 
 手机提示分别位于运营页与方案页的 `div.table-wrap`，示例节点是 `th`，不是圆角卡片。运营页第一列有意固定在左侧，方案页保留完整比较表；实际画面和局部滚动检查未显示卡片边缘裁切。裁定为横向表格被套用卡片规则的误报，保留原始结果，不加全局忽略。首轮手机扫描同类提示为三条；告警数量变化不是审美提升分数。
 
-本地证据在 `samples/papyra/evidence/`：`checks.json`、`comparison.json`、`impeccable-static.json`、`impeccable-browser-1440x1000.json`、`impeccable-browser-390x844.json`、截图和 PDF。这些文件不纳入 Git；比较测量与 PDFKit 辅助检查为本轮临时工具，不由常规检查脚本重新生成。
+本地证据当时位于 `samples/papyra/evidence/`：`checks.json`、`comparison.json`、`impeccable-static.json`、渲染扫描 JSON、截图和 PDF。这些文件未纳入 Git，已随 0.2.0 样本整理删除，不可恢复；比较测量与 PDFKit 辅助检查为本轮临时工具，不由常规检查脚本重新生成。
 
 ## 剩余边界
 
@@ -95,6 +97,8 @@
 - 本轮证明新版指导可用于完成这些阅读页面，不能宣称生成稳定性或普遍审美提升已验证。
 
 ## 复现
+
+以下命令针对 0.1.1 轮目录结构；先恢复该轮产物再运行：`git checkout c063b17 -- samples/papyra`。
 
 常规离线、文字、交互和布局检查：
 
