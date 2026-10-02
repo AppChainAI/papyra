@@ -47,7 +47,7 @@ CLI 依赖用户已经安装并配置好的本地 agent。文档是否发送至�
 
 ## 项目状态
 
-当前已提供自包含的 Papyra Skill 初版，并用相同的三个样本完成首轮生成与浏览器检查；CLI 尚未实现。本轮属于同一 agent 的自检，不是独立质量评测。
+当前已提供自包含的 Papyra Skill 0.2.0。`samples/` 保留三份输入 Markdown 与 `output/` 下三份最终 HTML（蓝图、报刊号外、蓝图+线路示意），均为 fresh-context agent 仅凭 skill 文本独立生成，已做源码级保真核对与静态截图，浏览器交互未逐页实测。CLI 尚未实现。生成为同模型族，跨模型验证未做，不是独立质量评测。
 
 完整范围、质量要求、验收标准与待确定事项见 [需求文档](docs/requirements.md)。
 
@@ -61,7 +61,7 @@ HTML 可直接在浏览器中离线打开，无需安装依赖或启动服务器
 | 需求开发 | [需求与验收规格](samples/requirements-development.md) | [状态规则与用例关联](samples/papyra/requirements-development.html) |
 | 设计方案 | [社区阅读室方案](samples/design-proposal.md) | [方案取舍与空间约束](samples/papyra/design-proposal.html) |
 
-新版直接进入原文，在对应章节增加内容解释与交互。全文保真、离线打开、主要交互和桌面/手机溢出检查通过，详见 [Papyra Skill 测试报告](docs/papyra-skill-evaluation.md)。
+三个页面分别采用运营复盘、技术规格与空间方案的阅读组织，在对应章节增加内容解释与交互。全文文字保真、离线打开、主要交互、键盘入口及桌面/手机溢出检查通过，详见 [Papyra Skill 测试报告](docs/papyra-skill-evaluation.md)。Impeccable 检测器仅用于可选开发验收，不是 Skill 或生成页面的运行依赖。
 
 macOS 可直接打开，例如：
 
@@ -80,6 +80,8 @@ skills/papyra/
 │   ├── content-design.md
 │   ├── visual-design.md
 │   └── acceptance.md
+├── licenses/
+│   └── impeccable-Apache-2.0.txt
 └── THIRD_PARTY_NOTICES.md
 ```
 

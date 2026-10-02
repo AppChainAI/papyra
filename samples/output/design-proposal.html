@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>社区阅读室：空间与服务设计方案</title>
+<style>
+  :root {
+    --paper: #f6f3ec;
+    --paper-raised: #fbf9f4;
+    --grid: rgba(28, 78, 138, 0.055);
+    --ink: #22303f;
+    --blue: #1c4e8a;
+    --blue-deep: #143a66;
+    --blue-soft: #dce8f5;
+    --blue-softer: #ebf2f9;
+    --blue-line: rgba(28, 78, 138, 0.45);
+    --alert: #9c3a2d;
+    --muted: #5a6673;
+    --fs: "FangSong", "STFangsong", "仿宋", "FangSong_GB2312", "Noto Serif CJK SC", serif;
+    --sans: -apple-system, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+    background-size: 28px 28px;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 17px;
+    line-height: 1.7;
+  }
+  /* ---------- 字体角色 ---------- */
+  h1, h2, h3, .drawing-label, .fig-tag, .zone-name, .toc-title, .title-block {
+    font-family: var(--fs);
+  }
+  .num, td.num, th.num, .bar-value, .tl-week {
+    font-variant-numeric: tabular-nums;
+  }
+  h1 {
+    font-size: 1.75rem;
+    line-height: 1.3;
+    color: var(--blue-deep);
+    margin: 0 0 0.35em;
+    letter-spacing: 0.02em;
+  }
+  h2 {
+    font-size: 1.32rem;
+    line-height: 1.35;
+    color: var(--blue-deep);
+    margin: 2.4em 0 0.7em;
+    padding-bottom: 0.3em;
+    border-bottom: 1.5px solid var(--blue-line);
+    letter-spacing: 0.03em;
+  }
+  h2 .sec-mark { color: var(--blue); font-size: 0.85em; margin-right: 0.4em; }
+  p { margin: 0.7em 0; max-width: 38em; }
+  ul, ol { max-width: 38em; padding-left: 1.5em; }
+  li { margin: 0.3em 0; }
+  a { color: var(--blue); text-underline-offset: 0.18em; }
+  strong { color: var(--blue-deep); }
+  :focus-visible {
+    outline: 2.5px solid var(--blue);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  section { scroll-margin-top: 1.2em; }
+  /* ---------- 图签栏（首屏概念区，全部取自原文事实） ---------- */
+  .sheet-header {
+    border-bottom: 3px double var(--blue-line);
+    padding: 1.1rem 0 1rem;
+    margin-bottom: 1.6rem;
+  }
+  .title-block {
+    display: flex;
+    flex-wrap: wrap;
+    border: 1.5px solid var(--blue-line);
+    background: var(--paper-raised);
+    max-width: 62em;
+  }
+  .tb-cell {
+    padding: 0.5em 1em;
+    border-right: 1px solid var(--blue-line);
+    min-width: 10em;
+    flex: 1 1 auto;
+  }
+  .tb-cell:last-child { border-right: none; }
+  .tb-k {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 0.1em;
+  }
+  .tb-v { font-size: 1rem; color: var(--blue-deep); letter-spacing: 0.02em; }
+  .tb-note {
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin: 0.45em 0 0;
+    font-family: var(--fs);
+    letter-spacing: 0.04em;
+  }
+  /* ---------- 布局 ---------- */
+  .layout {
+    display: grid;
+    grid-template-columns: 13.5em minmax(0, 1fr);
+    gap: 0 2.6rem;
+    max-width: 72em;
+    margin: 0 auto;
+    padding: 0 1.4rem 4rem;
+  }
+  .sheet-head-wrap { max-width: 72em; margin: 0 auto; padding: 0 1.4rem; }
+  main { min-width: 0; }
+  /* ---------- 目录 ---------- */
+  .toc { align-self: start; position: sticky; top: 1rem; margin-top: 0.4rem; }
+  .toc summary {
+    font-family: var(--fs);
+    color: var(--blue-deep);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    padding: 0.3em 0;
+    list-style: none;
+  }
+  .toc summary::before { content: "▸ "; color: var(--blue); }
+  .toc[open] summary::before { content: "▾ "; }
+  .toc ol { list-style: none; padding: 0; margin: 0.3em 0 0; max-width: none; }
+  .toc li { margin: 0; }
+  .toc a {
+    display: block;
+    padding: 0.3em 0.2em 0.3em 0.9em;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    text-decoration: none;
+    color: var(--ink);
+    border-left: 2px solid transparent;
+  }
+  .toc a:hover { color: var(--blue); }
+  .toc a[aria-current="true"] {
+    color: var(--blue-deep);
+    border-left-color: var(--blue);
+    background: var(--blue-softer);
+    font-weight: 600;
+  }
+  /* ---------- 表格 ---------- */
+  .table-scroll { overflow-x: auto; max-width: 46em; margin: 1em 0; }
+  table {
+    border-collapse: collapse;
+    min-width: 100%;
+    font-size: 0.94rem;
+    line-height: 1.55;
+    background: var(--paper-raised);
+  }
+  caption {
+    text-align: left;
+    font-family: var(--fs);
+    color: var(--muted);
+    font-size: 0.85rem;
+    padding-bottom: 0.4em;
+    letter-spacing: 0.04em;
+  }
+  th, td {
+    border: 1px solid var(--blue-line);
+    padding: 0.5em 0.8em;
+    text-align: left;
+    vertical-align: top;
+  }
+  thead th {
+    background: var(--blue-soft);
+    color: var(--blue-deep);
+    font-family: var(--fs);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  tbody tr[data-zone] { cursor: pointer; transition: background-color 0.15s ease; }
+  tbody tr[data-zone]:hover, tbody tr[data-zone].active { background: var(--blue-soft); }
+  .rec-badge {
+    display: inline-block;
+    font-family: var(--fs);
+    font-size: 0.78rem;
+    color: #fff;
+    background: var(--blue);
+    padding: 0.05em 0.55em;
+    border-radius: 2px;
+    letter-spacing: 0.1em;
+    margin-left: 0.4em;
+    vertical-align: 0.1em;
+  }
+  tfoot td { font-weight: 700; background: var(--blue-softer); }
+  /* ---------- 平面分区示意 ---------- */
+  figure { margin: 1.4em 0; max-width: 46em; }
+  .plan-wrap {
+    border: 1.5px solid var(--blue-line);
+    background: var(--paper-raised);
+    padding: 0.8rem;
+  }
+  .plan-wrap svg { display: block; width: 100%; height: auto; }
+  .zone rect {
+    fill: var(--blue-softer);
+    stroke: var(--blue);
+    stroke-width: 1.5;
+    transition: fill 0.15s ease;
+  }
+  .zone.z-quiet rect { fill: #cfe1f2; }
+  .zone.z-corridor rect { fill: #f1ecdf; stroke-dasharray: 6 4; }
+  .zone:hover rect, .zone:focus-visible rect, .zone.active rect { fill: #a9c8e6; }
+  .zone text { font-family: var(--fs); fill: var(--blue-deep); pointer-events: none; }
+  .zone .zone-name { font-size: 17px; letter-spacing: 1px; }
+  .zone .zone-area { font-size: 13.5px; fill: var(--blue); }
+  .plan-flow { stroke: var(--blue); stroke-width: 2; fill: none; stroke-dasharray: 7 5; }
+  .plan-flow-label { font-family: var(--fs); font-size: 12.5px; fill: var(--blue); letter-spacing: 1px; }
+  .plan-wall { stroke: var(--blue-deep); stroke-width: 3; fill: none; }
+  .plan-window { stroke: var(--blue); stroke-width: 5; fill: none; }
+  figcaption, .fig-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-top: 0.5em;
+    max-width: 46em;
+  }
+  .fig-tag {
+    color: var(--blue);
+    letter-spacing: 0.1em;
+    margin-right: 0.5em;
+  }
+  /* ---------- 预算条形 ---------- */
+  .bars { max-width: 46em; margin: 1.2em 0; border: 1.5px solid var(--blue-line); background: var(--paper-raised); padding: 1rem 1.2rem; }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 8.5em minmax(0, 1fr) 6.5em;
+    align-items: center;
+    gap: 0.8em;
+    margin: 0.5em 0;
+    font-size: 0.92rem;
+  }
+  .bar-track {
+    position: relative;
+    height: 1.15em;
+    background: var(--blue-softer);
+    border: 1px solid var(--blue-line);
+  }
+  .bar-fill { display: block; height: 100%; background: var(--blue); }
+  .bar-fill.f-total { background: var(--blue-deep); }
+  .bar-rest {
+    position: absolute;
+    top: 0; bottom: 0;
+    background: repeating-linear-gradient(45deg, transparent 0 4px, rgba(28,78,138,0.22) 4px 8px);
+    border-left: 1.5px dashed var(--blue);
+  }
+  .bar-value { text-align: right; white-space: nowrap; color: var(--blue-deep); }
+  .bar-row.r-total { font-weight: 700; border-top: 1px solid var(--blue-line); padding-top: 0.55em; margin-top: 0.8em; }
+  /* ---------- 时间线 ---------- */
+  .timeline { display: flex; gap: 0; max-width: 46em; margin: 1.2em 0; border: 1.5px solid var(--blue-line); background: var(--paper-raised); }
+  .tl-phase { padding: 0.8em 1em; border-right: 1.5px solid var(--blue-line); min-width: 0; }
+  .tl-phase:last-child { border-right: none; }
+  .tl-phase.p1 { flex: 1 1 0; } .tl-phase.p2 { flex: 2 1 0; }
+  .tl-phase.p3 { flex: 3 1 0; } .tl-phase.p4 { flex: 1 1 0; }
+  .tl-week { font-size: 0.8rem; color: var(--blue); letter-spacing: 0.06em; }
+  .tl-name { font-family: var(--fs); font-size: 1.05rem; color: var(--blue-deep); margin: 0.1em 0 0.25em; letter-spacing: 0.05em; }
+  .tl-out { font-size: 0.84rem; line-height: 1.55; color: var(--ink); }
+  /* ---------- 服务流程 ---------- */
+  ol.steps { list-style: none; counter-reset: step; padding: 0; max-width: 38em; }
+  ol.steps li {
+    counter-increment: step;
+    position: relative;
+    padding: 0.55em 0 0.55em 3em;
+    margin: 0;
+    border-left: none;
+  }
+  ol.steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0.4em; top: 0.62em;
+    width: 1.7em; height: 1.7em;
+    border: 1.5px solid var(--blue);
+    border-radius: 50%;
+    color: var(--blue-deep);
+    font-family: var(--fs);
+    text-align: center;
+    line-height: 1.7em;
+    background: var(--paper-raised);
+  }
+  ol.steps li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: calc(0.4em + 0.85em - 0.75px);
+    top: calc(0.62em + 1.9em);
+    bottom: -0.1em;
+    width: 1.5px;
+    background: var(--blue-line);
+  }
+  /* ---------- 风险与审核 ---------- */
+  .review-list { list-style: none; padding-left: 0.2em; }
+  .review-list li { padding-left: 1.9em; position: relative; }
+  .review-list li::before {
+    content: "";
+    position: absolute;
+    left: 0.2em; top: 0.42em;
+    width: 0.95em; height: 0.95em;
+    border: 1.5px solid var(--alert);
+    background: var(--paper-raised);
+  }
+  .risk { border-left: 3px solid var(--alert); padding-left: 1em; }
+  .risk strong { color: var(--alert); }
+  .note-est { color: var(--muted); font-size: 0.9rem; }
+  /* ---------- 页脚 ---------- */
+  footer {
+    border-top: 3px double var(--blue-line);
+    margin-top: 3rem;
+    padding-top: 1rem;
+    font-size: 0.82rem;
+    color: var(--muted);
+    max-width: 46em;
+  }
+  /* ---------- 响应式 ---------- */
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .toc { position: static; margin: 0 0 1.2rem; border: 1.5px solid var(--blue-line); background: var(--paper-raised); padding: 0.4em 0.9em; }
+    .toc summary { font-size: 0.95rem; }
+  }
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .timeline { flex-direction: column; }
+    .tl-phase { border-right: none; border-bottom: 1.5px solid var(--blue-line); }
+    .tl-phase:last-child { border-bottom: none; }
+    .bar-row { grid-template-columns: 6.8em minmax(0, 1fr) 6em; font-size: 0.86rem; gap: 0.55em; }
+    .zone .zone-name { font-size: 15px; }
+    .zone .zone-area { font-size: 12px; }
+    .tb-cell { min-width: 45%; border-bottom: 1px solid var(--blue-line); }
+  }
+  /* ---------- 减少动态 ---------- */
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
+  /* ---------- 打印 ---------- */
+  @media print {
+    body { background: #fff; font-size: 12pt; }
+    .layout { display: block; max-width: none; }
+    .toc { display: none; }
+    .zone rect, .bar-fill, thead th, tfoot td { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    figure, .bars, .timeline, .table-scroll { break-inside: avoid; }
+    a { color: var(--ink); }
+  }
+</style>
+</head>
+<body>
+
+<div class="sheet-head-wrap">
+  <header class="sheet-header">
+    <div class="title-block" role="group" aria-label="图签：项目基本信息">
+      <div class="tb-cell"><span class="tb-k">图签 · 项目地点</span><span class="tb-v">南岸社区二层</span></div>
+      <div class="tb-cell"><span class="tb-k">服务对象</span><span class="tb-v">居民、学生与远程工作者</span></div>
+      <div class="tb-cell"><span class="tb-k">方案评审</span><span class="tb-v num">2026 年 10 月 8 日</span></div>
+      <div class="tb-cell"><span class="tb-k">建筑面积</span><span class="tb-v num">96 平方米</span></div>
+    </div>
+    <p class="tb-note">图签为版面示意编排，以上信息均取自原文。</p>
+  </header>
+</div>
+
+<div class="layout">
+
+  <nav class="toc" aria-label="目录">
+    <details id="toc-details" open>
+      <summary class="toc-title">目录 · 定位</summary>
+      <ol>
+        <li><a href="#sec-task">设计任务</a></li>
+        <li><a href="#sec-needs">使用需求</a></li>
+        <li><a href="#sec-options">两种方案</a></li>
+        <li><a href="#sec-space">推荐方案的空间分配</a></li>
+        <li><a href="#sec-flow">服务流程</a></li>
+        <li><a href="#sec-material">材料与视觉</a></li>
+        <li><a href="#sec-budget">预算拆分</a></li>
+        <li><a href="#sec-phases">实施阶段</a></li>
+        <li><a href="#sec-review">评审与风险</a></li>
+      </ol>
+    </details>
+  </nav>
+
+  <main>
+    <h1>社区阅读室：空间与服务设计方案</h1>
+
+    <section id="sec-task" aria-labelledby="h-task">
+      <h2 id="h-task"><span class="sec-mark">§</span>设计任务</h2>
+      <p>把 96 平方米的闲置活动室改为日常阅读与小型交流兼容的社区阅读室。保留现有窗户和承重结构，不把安静阅读与活动声场混在一起。</p>
+      <p>本次方案只讨论空间组织、服务流程与预算，不替代消防、结构及无障碍专项审核。</p>
+    </section>
+
+    <section id="sec-needs" aria-labelledby="h-needs">
+      <h2 id="h-needs"><span class="sec-mark">§</span>使用需求</h2>
+      <ul>
+        <li>工作日下午以个人阅读与远程工作为主。</li>
+        <li>周末举办不超过 12 人的读书交流。</li>
+        <li>入口处可归还图书，工作人员能看清借还区域。</li>
+        <li>阅读位应避免屏幕正对窗户反光。</li>
+        <li>通道连续，无障碍路径不被临时家具占用。</li>
+      </ul>
+    </section>
+
+    <section id="sec-options" aria-labelledby="h-options">
+      <h2 id="h-options"><span class="sec-mark">§</span>两种方案</h2>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="两种方案对照表，可横向滚动">
+        <table>
+          <caption>方案 A 与方案 B 在同一六个维度上的对照（“推荐”标注来自原文结论）</caption>
+          <thead>
+            <tr>
+              <th scope="col">维度</th>
+              <th scope="col">A：长桌共读</th>
+              <th scope="col">B：分区阅读<span class="rec-badge">推荐</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">固定阅读座位</th><td class="num">24 席</td><td class="num">18 席</td></tr>
+            <tr><th scope="row">交流方式</th><td>中央长桌兼作活动桌</td><td>独立交流区，最多 12 人</td></tr>
+            <tr><th scope="row">声音边界</th><td>阅读与交流同处一个声场</td><td>书架与吸声帘形成缓冲</td></tr>
+            <tr><th scope="row">管理视线</th><td>一眼可见全部座位</td><td>需要补充交流区观察点</td></tr>
+            <tr><th scope="row">调整成本</th><td>低，家具统一</td><td>较高，需要分区与吸声处理</td></tr>
+            <tr><th scope="row">初步预算</th><td class="num">68,500 元</td><td class="num">86,200 元</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p><strong>推荐 B。</strong>减少 6 个固定阅读位，换取日常安静阅读与周末交流可同时进行。吸声帘不能保证完全隔音，活动时仍需限制音量。</p>
+    </section>
+
+    <section id="sec-space" aria-labelledby="h-space">
+      <h2 id="h-space"><span class="sec-mark">§</span>推荐方案的空间分配</h2>
+
+      <figure>
+        <div class="plan-wrap">
+          <svg viewBox="0 0 660 460" role="img" aria-labelledby="plan-title plan-desc">
+            <title id="plan-title">推荐方案平面分区示意图</title>
+            <desc id="plan-desc">示意平面图：入口位于下方；入口侧为交流区（24 平方米）与书架借还区（14 平方米）；中部为通道与缓冲区（20 平方米）；深处为安静阅读区（38 平方米）。动线为入口到借还区，经通道到安静阅读区。不按比例测绘。</desc>
+            <!-- 外墙与入口开口（入口在下方借还区一侧） -->
+            <path class="plan-wall" d="M 40 30 H 600 V 400 H 520 M 430 400 H 40 V 30" />
+            <!-- 北墙窗户（保留现有窗户，示意） -->
+            <path class="plan-window" d="M 140 27 v 6 M 240 27 v 6 M 340 27 v 6" aria-hidden="true" />
+            <text class="plan-flow-label" x="140" y="20">窗（保留现有，示意）</text>
+            <!-- 分区：点击可定位到下方表格对应行 -->
+            <a class="zone z-quiet" href="#row-quiet" data-zone="quiet" aria-label="安静阅读区，38 平方米，查看表格对应行">
+              <rect x="50" y="40" width="540" height="140" />
+              <text class="zone-name" x="320" y="102" text-anchor="middle">安静阅读区</text>
+              <text class="zone-area num" x="320" y="126" text-anchor="middle">38 ㎡ · 18 个固定阅读位</text>
+            </a>
+            <a class="zone z-corridor" href="#row-corridor" data-zone="corridor" aria-label="通道与缓冲区，20 平方米，查看表格对应行">
+              <rect x="50" y="190" width="540" height="76" />
+              <text class="zone-name" x="320" y="222" text-anchor="middle">通道与缓冲区</text>
+              <text class="zone-area num" x="320" y="244" text-anchor="middle">20 ㎡ · 连续通行、声场缓冲</text>
+            </a>
+            <a class="zone z-social" href="#row-social" data-zone="social" aria-label="交流区，24 平方米，查看表格对应行">
+              <rect x="50" y="276" width="330" height="114" />
+              <text class="zone-name" x="215" y="326" text-anchor="middle">交流区</text>
+              <text class="zone-area num" x="215" y="350" text-anchor="middle">24 ㎡ · 最多 12 人</text>
+            </a>
+            <a class="zone z-desk" href="#row-desk" data-zone="desk" aria-label="书架与借还区，14 平方米，查看表格对应行">
+              <rect x="390" y="276" width="200" height="114" />
+              <text class="zone-name" x="490" y="316" text-anchor="middle">书架与借还区</text>
+              <text class="zone-area num" x="490" y="338" text-anchor="middle">14 ㎡ · 展示、归还与管理</text>
+            </a>
+            <!-- 动线：入口 → 借还区 → 通道 → 安静阅读区 -->
+            <g aria-hidden="true">
+              <path class="plan-flow" d="M 475 446 V 380 H 490 V 350" />
+              <path class="plan-flow" d="M 490 268 V 236" />
+              <path class="plan-flow" d="M 490 182 V 110 H 340" />
+              <polygon points="490,346 484,358 496,358" fill="var(--blue)" stroke="none" />
+              <polygon points="490,232 484,244 496,244" fill="var(--blue)" stroke="none" />
+              <polygon points="344,110 356,104 356,116" fill="var(--blue)" stroke="none" />
+              <text class="plan-flow-label" x="475" y="458" text-anchor="middle">入口</text>
+            </g>
+          </svg>
+        </div>
+        <figcaption><span class="fig-tag">示意</span>分区形状与位置按原文空间关系编排：入口 → 借还区 → 通道 → 安静阅读区，交流区位于入口侧；面积数字来自下表的功能预算，<strong>不按比例测绘，不是施工图</strong>。点选分区可定位到下表对应行；表格行获得焦点或悬停时，对应分区同步高亮。</figcaption>
+      </figure>
+
+      <div class="table-scroll" tabindex="0" role="region" aria-label="空间分配表，可横向滚动">
+        <table>
+          <caption>推荐方案（B：分区阅读）的功能面积预算，合计 96 平方米，不新增建筑面积</caption>
+          <thead>
+            <tr><th scope="col">区域</th><th scope="col" class="num">面积（平方米）</th><th scope="col">用途</th></tr>
+          </thead>
+          <tbody>
+            <tr id="row-quiet" data-zone="quiet" tabindex="0"><th scope="row">安静阅读区</th><td class="num">38</td><td>18 个固定阅读位</td></tr>
+            <tr id="row-social" data-zone="social" tabindex="0"><th scope="row">交流区</th><td class="num">24</td><td>最多 12 人活动</td></tr>
+            <tr id="row-desk" data-zone="desk" tabindex="0"><th scope="row">书架与借还区</th><td class="num">14</td><td>图书展示、归还与管理</td></tr>
+            <tr id="row-corridor" data-zone="corridor" tabindex="0"><th scope="row">通道与缓冲区</th><td class="num">20</td><td>连续通行、声场缓冲</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><th scope="row">合计</th><td class="num">96</td><td>不新增建筑面积</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p>空间关系：入口 → 借还区 → 通道 → 安静阅读区；交流区位于入口侧，避免活动人流穿过安静区。以下面积是功能预算，不是按比例测绘的施工图。</p>
+    </section>
+
+    <section id="sec-flow" aria-labelledby="h-flow">
+      <h2 id="h-flow"><span class="sec-mark">§</span>服务流程</h2>
+      <ol class="steps">
+        <li>到达入口，查看座位和活动安排。</li>
+        <li>日常阅读直接进入安静区；活动参与者在入口侧交流区签到。</li>
+        <li>借书由工作人员确认，归还放入归还区，不直接混回书架。</li>
+        <li>闭馆前 15 分钟通知读者，检查借还记录与通道。</li>
+      </ol>
+    </section>
+
+    <section id="sec-material" aria-labelledby="h-material">
+      <h2 id="h-material"><span class="sec-mark">§</span>材料与视觉</h2>
+      <ul>
+        <li>墙面：低反光的浅灰白，避免阅读时产生眩光。</li>
+        <li>桌面：浅色木纹，易清洁，不采用高光漆。</li>
+        <li>导视：深蓝文字搭配清晰箭头，不仅依赖颜色区分区域。</li>
+        <li>吸声：优先处理交流区；正式选型前确认清洁、阻燃与维护要求。</li>
+        <li>照明：阅读面照度和色温交由专项设计确认，不以装饰灯代替任务照明。</li>
+      </ul>
+    </section>
+
+    <section id="sec-budget" aria-labelledby="h-budget">
+      <h2 id="h-budget"><span class="sec-mark">§</span>预算拆分</h2>
+
+      <div class="bars" role="group" aria-label="预算拆分条形图：各项目金额与预算上限 90,000 元的比例">
+        <div class="bar-row"><span>家具与书架</span><span class="bar-track"><span class="bar-fill" style="width:36.4%"></span></span><span class="bar-value num">32,800 元</span></div>
+        <div class="bar-row"><span>照明与电气调整</span><span class="bar-track"><span class="bar-fill" style="width:20.7%"></span></span><span class="bar-value num">18,600 元</span></div>
+        <div class="bar-row"><span>吸声与窗帘</span><span class="bar-track"><span class="bar-fill" style="width:16%"></span></span><span class="bar-value num">14,400 元</span></div>
+        <div class="bar-row"><span>导视与借还设施</span><span class="bar-track"><span class="bar-fill" style="width:6.9%"></span></span><span class="bar-value num">6,200 元</span></div>
+        <div class="bar-row"><span>预备费</span><span class="bar-track"><span class="bar-fill" style="width:15.8%"></span></span><span class="bar-value num">14,200 元</span></div>
+        <div class="bar-row r-total"><span>合计</span><span class="bar-track"><span class="bar-fill f-total" style="width:95.8%"></span><span class="bar-rest" style="left:95.8%;width:4.2%" title="预算上限内剩余 3,800 元"></span></span><span class="bar-value num">86,200 元</span></div>
+      </div>
+      <p class="fig-note"><span class="fig-tag">图注</span>条长按“金额 ÷ 预算上限 90,000 元”绘制，每条轨道全长即 90,000 元；合计条尾部的斜线余量为上限内剩余 3,800 元。金额为初步估算，未包含新增结构工程。</p>
+
+      <div class="table-scroll" tabindex="0" role="region" aria-label="预算拆分表，可横向滚动">
+        <table>
+          <caption>预算拆分（初步估算），合计 86,200 元，预算上限 90,000 元</caption>
+          <thead>
+            <tr><th scope="col">项目</th><th scope="col" class="num">金额（元）</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">家具与书架</th><td class="num">32,800</td></tr>
+            <tr><th scope="row">照明与电气调整</th><td class="num">18,600</td></tr>
+            <tr><th scope="row">吸声与窗帘</th><td class="num">14,400</td></tr>
+            <tr><th scope="row">导视与借还设施</th><td class="num">6,200</td></tr>
+            <tr><th scope="row">预备费</th><td class="num">14,200</td></tr>
+          </tbody>
+          <tfoot>
+            <tr><th scope="row">合计</th><td class="num">86,200</td></tr>
+          </tfoot>
+        </table>
+      </div>
+      <p>金额为初步估算，未包含新增结构工程；实际采购以审核后的清单和报价为准。预算上限为 90,000 元，剩余空间 3,800 元。</p>
+    </section>
+
+    <section id="sec-phases" aria-labelledby="h-phases">
+      <h2 id="h-phases"><span class="sec-mark">§</span>实施阶段</h2>
+      <div class="timeline" role="group" aria-label="实施阶段时间线，第 1 周至第 7 周，段长按周数比例 1:2:3:1">
+        <div class="tl-phase p1"><div class="tl-week num">第 1 周</div><div class="tl-name">现场复核</div><div class="tl-out">尺寸、消防及无障碍问题清单</div></div>
+        <div class="tl-phase p2"><div class="tl-week num">第 2–3 周</div><div class="tl-name">深化设计</div><div class="tl-out">布局图、材料表与采购清单</div></div>
+        <div class="tl-phase p3"><div class="tl-week num">第 4–6 周</div><div class="tl-name">采购施工</div><div class="tl-out">家具安装、电气与吸声处理</div></div>
+        <div class="tl-phase p4"><div class="tl-week num">第 7 周</div><div class="tl-name">试运行</div><div class="tl-out">人流、噪声与维护反馈</div></div>
+      </div>
+      <p class="fig-note"><span class="fig-tag">图注</span>时间线段长按阶段周数比例绘制（1 : 2 : 3 : 1，共 7 周）。</p>
+      <div class="table-scroll" tabindex="0" role="region" aria-label="实施阶段表，可横向滚动">
+        <table>
+          <caption>实施阶段与交付物（原文表格）</caption>
+          <thead>
+            <tr><th scope="col">阶段</th><th scope="col">时间</th><th scope="col">交付物</th></tr>
+          </thead>
+          <tbody>
+            <tr><th scope="row">现场复核</th><td class="num">第 1 周</td><td>尺寸、消防及无障碍问题清单</td></tr>
+            <tr><th scope="row">深化设计</th><td class="num">第 2–3 周</td><td>布局图、材料表与采购清单</td></tr>
+            <tr><th scope="row">采购施工</th><td class="num">第 4–6 周</td><td>家具安装、电气与吸声处理</td></tr>
+            <tr><th scope="row">试运行</th><td class="num">第 7 周</td><td>人流、噪声与维护反馈</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="sec-review" aria-labelledby="h-review">
+      <h2 id="h-review"><span class="sec-mark">§</span>评审与风险</h2>
+      <p class="note-est">以下为评审待核事项（原文均为未完成状态，本页不提供勾选，勾选不代表审核通过）：</p>
+      <ul class="review-list">
+        <li>消防疏散与无障碍路径经专项审核。</li>
+        <li>交流活动不会占用固定阅读位或堵塞通道。</li>
+        <li>家具与材料满足维护和阻燃要求。</li>
+        <li>预算不超过 90,000 元，新增工程单独报批。</li>
+      </ul>
+      <p class="risk"><strong>风险与应对：</strong>若现场审核发现不能形成连续通道，需重新调整布局，不以压缩通道换取更多座位。若活动噪声无法控制，先错开活动时段，再讨论追加隔声工程。</p>
+    </section>
+
+    <footer>
+      <p>本页由《社区阅读室：空间与服务设计方案》Markdown 文档转译为单文件阅读页：正文、数字与结论均完整保留自原文；平面分区图、预算条形与阶段时间线为按原文数据生成的示意表达，均已标注口径与“示意”属性；图签为版面示意编排，信息取自原文。</p>
+    </footer>
+  </main>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /* 窄屏默认收起目录，宽屏展开 */
+  var tocDetails = document.getElementById("toc-details");
+  if (window.matchMedia("(max-width: 900px)").matches) {
+    tocDetails.removeAttribute("open");
+  }
+
+  /* 目录当前位置 */
+  var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+  var sections = tocLinks
+    .map(function (a) { return document.querySelector(a.getAttribute("href")); })
+    .filter(Boolean);
+  if ("IntersectionObserver" in window && sections.length) {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          tocLinks.forEach(function (a) {
+            a.setAttribute("aria-current",
+              a.getAttribute("href") === "#" + entry.target.id ? "true" : "false");
+          });
+        }
+      });
+    }, { rootMargin: "-15% 0px -70% 0px" });
+    sections.forEach(function (s) { observer.observe(s); });
+  }
+
+  /* 平面分区示意 ↔ 空间分配表 互查高亮 */
+  var zones = Array.prototype.slice.call(document.querySelectorAll(".zone[data-zone]"));
+  var rows = Array.prototype.slice.call(document.querySelectorAll("tr[data-zone]"));
+  function zoneEl(key) { return document.querySelector(".zone[data-zone='" + key + "']"); }
+  function rowEl(key) { return document.getElementById("row-" + key); }
+  function setActive(key, on) {
+    var z = zoneEl(key), r = rowEl(key);
+    if (z) { z.classList.toggle("active", on); }
+    if (r) { r.classList.toggle("active", on); }
+  }
+  zones.forEach(function (z) {
+    var key = z.getAttribute("data-zone");
+    z.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      setActive(key, true);
+      var r = rowEl(key);
+      if (r) {
+        r.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "nearest" });
+        r.focus({ preventScroll: true });
+      }
+    });
+    z.addEventListener("mouseenter", function () { setActive(key, true); });
+    z.addEventListener("mouseleave", function () { setActive(key, false); });
+    z.addEventListener("focus", function () { setActive(key, true); });
+    z.addEventListener("blur", function () { setActive(key, false); });
+  });
+  rows.forEach(function (r) {
+    var key = r.getAttribute("data-zone");
+    r.addEventListener("mouseenter", function () { setActive(key, true); });
+    r.addEventListener("mouseleave", function () { setActive(key, false); });
+    r.addEventListener("focus", function () { setActive(key, true); });
+    r.addEventListener("blur", function () { setActive(key, false); });
+  });
+})();
+</script>
+</body>
+</html>

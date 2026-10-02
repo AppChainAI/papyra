@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>秋季工作坊：市场运营周报与执行计划</title>
+<style>
+/* ========== 概念：内部快报号外 —— 报刊刊头 + 新闻纸底 + 宋体标题 ========== */
+:root {
+  --paper: #f6f1e2;
+  --paper-deep: #efe8d2;
+  --ink: #241e14;
+  --ink-soft: #6a5f4b;
+  --line: #cfc4a6;
+  --line-strong: #241e14;
+  --alert: #a03022;
+  --alert-deep: #7c2418;
+  --rule-thin: 1px solid var(--line);
+  --measure: 34em;
+  --serif: "Songti SC", "STSong", "STZhongsong", "SimSun", "Noto Serif CJK SC", serif;
+  --mono: "SF Mono", "Menlo", "Consolas", "Courier New", monospace;
+}
+* { box-sizing: border-box; }
+html {
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--serif);
+  font-size: 17px;
+  line-height: 1.75;
+}
+::selection { background: #e8d9a8; color: var(--ink); }
+
+/* ---------- 刊头（概念区，元信息逐字移入） ---------- */
+.masthead {
+  border-bottom: 3px double var(--line-strong);
+  padding: 0.9rem 1.25rem 1.1rem;
+  max-width: 72rem;
+  margin: 0 auto;
+}
+.press-line {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  border-bottom: var(--rule-thin);
+  padding-bottom: 0.5rem;
+}
+.press-line .improvised { color: var(--ink-soft); }
+h1 {
+  font-size: clamp(1.55rem, 4.2vw, 2.5rem);
+  line-height: 1.3;
+  margin: 0.85rem 0 0.55rem;
+  letter-spacing: 0.02em;
+  font-weight: 900;
+}
+.meta-line {
+  margin: 0;
+  font-size: 0.92rem;
+  color: var(--ink);
+}
+.meta-line strong { font-weight: 700; }
+
+/* ---------- 目次（sticky 报纸栏目条，增强节点） ---------- */
+.toc {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: var(--rule-thin);
+}
+.toc-inner {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin;
+}
+.toc-label {
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  color: var(--ink-soft);
+  flex: none;
+  padding-right: 0.35rem;
+  border-right: var(--rule-thin);
+}
+.toc a {
+  flex: none;
+  display: inline-block;
+  padding: 0.5rem 0.55rem;
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 0.92rem;
+  border-bottom: 2px solid transparent;
+}
+.toc a:hover { border-bottom-color: var(--ink-soft); }
+.toc a[aria-current="true"] {
+  border-bottom-color: var(--alert);
+  color: var(--alert-deep);
+  font-weight: 700;
+}
+
+/* ---------- 正文骨架 ---------- */
+main {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 0 1.25rem 4rem;
+  counter-reset: section;
+}
+section {
+  padding-top: 1.6rem;
+  scroll-margin-top: 3.4rem;
+}
+section + section { border-top: var(--rule-thin); margin-top: 1.6rem; }
+h2 {
+  font-size: 1.35rem;
+  line-height: 1.35;
+  font-weight: 900;
+  margin: 0 0 0.8rem;
+  letter-spacing: 0.04em;
+}
+h2::before {
+  counter-increment: section;
+  content: counter(section, cjk-ideographic) " 版 · ";
+  color: var(--alert);
+  font-weight: 700;
+}
+p { margin: 0 0 0.9rem; max-width: var(--measure); }
+ul, ol { margin: 0 0 0.9rem; padding-left: 1.6em; max-width: var(--measure); }
+li { margin-bottom: 0.35rem; }
+li::marker { color: var(--alert); font-weight: 700; }
+
+/* 本周结论：导语排版 */
+#sec-conclusion > p {
+  font-size: 1.12rem;
+  line-height: 1.8;
+  max-width: 32em;
+}
+#sec-conclusion > p::first-letter {
+  font-size: 2.1em;
+  font-weight: 900;
+  line-height: 1;
+  padding-right: 0.08em;
+}
+
+/* ---------- 表格（报刊通栏表） ---------- */
+.table-wrap { overflow-x: auto; margin: 0 0 1rem; max-width: 100%; }
+table {
+  border-collapse: collapse;
+  border-top: 2px solid var(--line-strong);
+  border-bottom: 2px solid var(--line-strong);
+  font-size: 0.95rem;
+  min-width: 34rem;
+}
+caption {
+  text-align: left;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+  padding: 0.45rem 0;
+  caption-side: bottom;
+}
+th, td { padding: 0.5rem 0.9rem 0.5rem 0; vertical-align: baseline; }
+th {
+  text-align: left;
+  font-weight: 700;
+  border-bottom: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
+td { border-bottom: var(--rule-thin); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr.total td { border-top: 1px solid var(--line-strong); font-weight: 700; }
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+th.num { text-align: right; }
+td .over-warn { color: var(--alert-deep); font-weight: 700; }
+
+/* ---------- 执行前检查清单（原文 [ ] 渲染为方框符号） ---------- */
+.checklist { list-style: none; padding-left: 0.1em; }
+.checklist li { display: flex; align-items: baseline; gap: 0.5rem; }
+.checklist .box {
+  flex: none;
+  display: inline-block;
+  width: 0.72em;
+  height: 0.72em;
+  border: 1.5px solid var(--ink);
+  transform: translateY(0.05em);
+}
+
+/* ---------- 风险与停止条件 ---------- */
+#sec-risks ol li { padding-left: 0.15em; }
+blockquote {
+  margin: 1.2rem 0 0;
+  padding: 0.7rem 0 0.7rem 1.1rem;
+  border-left: 4px solid var(--alert);
+  max-width: var(--measure);
+}
+blockquote p { margin: 0; font-size: 1.12rem; font-weight: 700; line-height: 1.7; }
+blockquote footer {
+  margin-top: 0.35rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.15em;
+  color: var(--ink-soft);
+}
+
+/* ---------- 增强表达统一外观（data-enhancement） ---------- */
+[data-enhancement] .enh-tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  padding: 0.05em 0.5em;
+  margin-bottom: 0.5rem;
+}
+figure[data-enhancement] {
+  margin: 0 0 1.2rem;
+  padding: 1rem 1.1rem;
+  background: var(--paper-deep);
+  border: var(--rule-thin);
+  border-top: 2px solid var(--line-strong);
+}
+figcaption, .fig-note {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-top: 0.6rem;
+}
+figcaption a { color: var(--alert-deep); }
+
+/* 头条进度图 */
+.headline-nums {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 1.4rem;
+  margin: 0.4rem 0 0.7rem;
+}
+.headline-nums .big {
+  font-size: 2.6rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.headline-nums .unit { font-size: 0.9rem; color: var(--ink-soft); }
+.headline-nums .gap { color: var(--alert-deep); font-weight: 700; }
+.progress-track {
+  position: relative;
+  height: 0.7rem;
+  background: var(--paper);
+  border: 1px solid var(--line-strong);
+}
+.progress-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 76.67%; /* 184 ÷ 240，示意比例 */
+  background: var(--ink);
+}
+.progress-goal {
+  position: absolute;
+  top: -0.35rem;
+  bottom: -0.35rem;
+  left: 100%;
+  width: 0;
+  border-left: 2px solid var(--alert);
+}
+.progress-scale {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  margin-top: 0.3rem;
+}
+
+/* 警戒线刻度图 */
+.gauge svg { display: block; width: 100%; height: auto; }
+.gauge text { font-family: var(--serif); }
+.gauge .g-num { font-family: var(--mono); }
+
+/* 预算对照条 */
+.budget-row { margin-bottom: 0.85rem; }
+.budget-row .b-label { font-size: 0.92rem; font-weight: 700; margin-bottom: 0.25rem; }
+.b-pair { display: grid; grid-template-columns: 4.6em 1fr 5.2em; align-items: center; gap: 0.5rem; margin-bottom: 0.2rem; }
+.b-pair .b-key { font-size: 0.75rem; color: var(--ink-soft); text-align: right; }
+.b-track { height: 0.85rem; background: var(--paper); border: 1px solid var(--line); position: relative; }
+.b-fill { position: absolute; inset: 0 auto 0 0; }
+.b-fill.actual { background: var(--ink); }
+.b-fill.plan { background: repeating-linear-gradient(-45deg, transparent 0 3px, var(--paper) 3px 5px), var(--alert); opacity: 0.85; }
+.b-val { font-family: var(--mono); font-size: 0.75rem; white-space: nowrap; }
+.budget-legend { display: flex; gap: 1.2rem; flex-wrap: wrap; font-size: 0.78rem; color: var(--ink-soft); margin-bottom: 0.8rem; }
+.budget-legend .swatch { display: inline-block; width: 1em; height: 0.7em; margin-right: 0.3em; vertical-align: baseline; }
+.swatch.actual { background: var(--ink); }
+.swatch.plan { background: repeating-linear-gradient(-45deg, transparent 0 2px, var(--paper) 2px 4px), var(--alert); }
+
+/* ---------- 链接、焦点 ---------- */
+a { color: var(--alert-deep); text-underline-offset: 0.18em; }
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--alert);
+  outline-offset: 2px;
+}
+
+/* ---------- 页脚说明 ---------- */
+.colophon {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 1rem 1.25rem 2rem;
+  border-top: 3px double var(--line-strong);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  letter-spacing: 0.05em;
+}
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .masthead, .toc-inner, main, .colophon { padding-left: 0.9rem; padding-right: 0.9rem; }
+  #sec-conclusion > p { font-size: 1.05rem; }
+  .headline-nums .big { font-size: 2.1rem; }
+  th, td { padding-right: 0.7rem; }
+  .b-pair { grid-template-columns: 3.8em 1fr 4.8em; }
+}
+
+/* ---------- 减少动态效果 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
+/* ---------- 打印：全部内容展开呈现 ---------- */
+@media print {
+  body { background: #fff; font-size: 12pt; }
+  .toc { display: none; }
+  figure[data-enhancement] { background: #fff; }
+  .progress-fill, .b-fill.actual { background: #444; }
+  section { break-inside: avoid-page; }
+  section + section { break-inside: auto; }
+  a { color: inherit; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 刊头概念区：标题与元信息为原文逐字移入 ============ -->
+<header class="masthead">
+  <div class="press-line" data-enhancement>
+    <span>市场运营 · 内部快报（刊头为示意）</span>
+    <span class="improvised">付印日：9 月 28 日（据评审日期演绎 · 示意）</span>
+  </div>
+  <h1>秋季工作坊：市场运营周报与执行计划</h1>
+  <p class="meta-line">统计周期：2026 年 9 月 21 日至 9 月 27 日。负责人：许宁。评审日期：9 月 28 日。</p>
+</header>
+
+<!-- ============ 目次（增强节点，导航） ============ -->
+<nav class="toc" data-enhancement aria-label="目次">
+  <div class="toc-inner">
+    <span class="toc-label">目次</span>
+    <a href="#sec-conclusion">本周结论</a>
+    <a href="#sec-metrics">目标与口径</a>
+    <a href="#sec-channels">渠道表现</a>
+    <a href="#sec-actions">下周行动</a>
+    <a href="#sec-budget">预算调整</a>
+    <a href="#sec-risks">风险与停止条件</a>
+    <a href="#sec-review">评审问题</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ============ 一版 · 本周结论 ============ -->
+  <section id="sec-conclusion" aria-labelledby="h-conclusion">
+    <h2 id="h-conclusion">本周结论</h2>
+    <p>工作坊报名已达到 184 人，距离 240 人目标还差 56 人。邮件渠道的报名转化率最高；付费投放贡献了最多访问，但单次报名成本已超过 160 元警戒线。下一周优先修复移动端报名流程，再调整投放预算，不以访问量替代有效报名。</p>
+
+    <figure data-enhancement class="headline-figure">
+      <span class="enh-tag">示意 · 数据出自本节与「目标与口径」</span>
+      <div class="headline-nums">
+        <span><span class="big">184</span> <span class="unit">有效报名</span></span>
+        <span><span class="big">240</span> <span class="unit">目标</span></span>
+        <span class="gap">还差 56 人</span>
+      </div>
+      <div class="progress-track" role="img" aria-label="有效报名进度示意：184 人，目标 240 人，还差 56 人">
+        <div class="progress-fill"></div>
+        <div class="progress-goal"></div>
+      </div>
+      <div class="progress-scale" aria-hidden="true"><span>0</span><span>目标 240</span></div>
+      <figcaption>进度条按 184 ÷ 240 绘制，为示意比例。到场目标 150 人尚无到场率数据（原文：到场率尚未产生），故不绘制。</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 二版 · 目标与口径 ============ -->
+  <section id="sec-metrics" aria-labelledby="h-metrics">
+    <h2 id="h-metrics">目标与口径</h2>
+    <ul>
+      <li>主目标：10 月 16 日前获得 240 个有效报名，至少 150 人实际到场。</li>
+      <li>有效报名：填写完整联系方式并确认参会意向；重复邮箱只计一次。</li>
+      <li>转化率：有效报名数 ÷ 去重落地页访问数。</li>
+      <li>单次报名成本：该渠道费用 ÷ 该渠道有效报名数。</li>
+      <li>到场率尚未产生，不得把确认参会人数当成实际到场人数。</li>
+    </ul>
+  </section>
+
+  <!-- ============ 三版 · 渠道表现 ============ -->
+  <section id="sec-channels" aria-labelledby="h-channels">
+    <h2 id="h-channels">渠道表现</h2>
+    <div class="table-wrap">
+      <table id="channel-table">
+        <thead>
+          <tr>
+            <th scope="col">渠道</th>
+            <th scope="col" class="num">去重访问</th>
+            <th scope="col" class="num">有效报名</th>
+            <th scope="col" class="num">费用（元）</th>
+            <th scope="col" class="num">转化率</th>
+            <th scope="col" class="num">单次报名成本（元）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">邮件</th><td class="num">820</td><td class="num">74</td><td class="num">1,480</td><td class="num">9.02%</td><td class="num">20.00</td></tr>
+          <tr><th scope="row">内容社区</th><td class="num">1,460</td><td class="num">62</td><td class="num">3,100</td><td class="num">4.25%</td><td class="num">50.00</td></tr>
+          <tr><th scope="row">付费投放</th><td class="num">2,360</td><td class="num">48</td><td class="num">8,640</td><td class="num">2.03%</td><td class="num over-warn">180.00</td></tr>
+          <tr class="total"><th scope="row">合计</th><td class="num">4,640</td><td class="num">184</td><td class="num">13,220</td><td class="num">3.97%</td><td class="num">71.85</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>渠道访问合计按渠道去重，不代表跨渠道的唯一访客总数。报名采用单一来源归因，合计不存在重复报名。</p>
+
+    <figure data-enhancement class="gauge">
+      <span class="enh-tag">示意 · 刻度依据上表「单次报名成本」列与「风险与停止条件」第 1 条</span>
+      <svg viewBox="0 0 640 205" role="img" aria-labelledby="gauge-title gauge-desc">
+        <title id="gauge-title">单次报名成本与警戒线对照（示意）</title>
+        <desc id="gauge-desc">刻度 0 至 200 元。邮件 20.00 元、内容社区 50.00 元、合计 71.85 元在 160 元警戒线以内；付费投放 180.00 元超出警戒线。</desc>
+        <!-- 刻度轴：x = 60 + 值 × 2.7（0→60，200→600） -->
+        <line x1="60" y1="120" x2="600" y2="120" stroke="#241e14" stroke-width="2"/>
+        <g stroke="#241e14" stroke-width="1">
+          <line x1="60" y1="120" x2="60" y2="128"/>
+          <line x1="195" y1="120" x2="195" y2="128"/>
+          <line x1="330" y1="120" x2="330" y2="128"/>
+          <line x1="465" y1="120" x2="465" y2="128"/>
+          <line x1="600" y1="120" x2="600" y2="128"/>
+        </g>
+        <g fill="#6a5f4b" font-size="11" text-anchor="middle" class="g-num">
+          <text x="60" y="143">0</text>
+          <text x="195" y="143">50</text>
+          <text x="330" y="143">100</text>
+          <text x="465" y="143">150</text>
+          <text x="600" y="143">200</text>
+        </g>
+        <text x="600" y="160" text-anchor="end" font-size="11" fill="#6a5f4b">单位：元 / 单次报名</text>
+        <!-- 警戒线 160 元 → x=492 -->
+        <line x1="492" y1="30" x2="492" y2="172" stroke="#a03022" stroke-width="1.5" stroke-dasharray="5 4"/>
+        <text x="492" y="20" text-anchor="middle" font-size="12" fill="#a03022" font-weight="bold">警戒线 160 元</text>
+        <!-- 邮件 20.00 → x=114（轴上方） -->
+        <g>
+          <line x1="114" y1="120" x2="114" y2="72" stroke="#241e14" stroke-width="1"/>
+          <circle cx="114" cy="120" r="5" fill="#241e14"/>
+          <text x="114" y="62" text-anchor="middle" font-size="13" font-weight="bold" fill="#241e14">邮件 <tspan class="g-num">20.00</tspan></text>
+        </g>
+        <!-- 内容社区 50.00 → x=195（轴上方，错位） -->
+        <g>
+          <line x1="195" y1="120" x2="195" y2="96" stroke="#241e14" stroke-width="1"/>
+          <circle cx="195" cy="120" r="5" fill="#241e14"/>
+          <text x="216" y="92" text-anchor="middle" font-size="13" font-weight="bold" fill="#241e14">内容社区 <tspan class="g-num">50.00</tspan></text>
+        </g>
+        <!-- 合计 71.85 → x=254（轴下方） -->
+        <g>
+          <line x1="254" y1="120" x2="254" y2="176" stroke="#6a5f4b" stroke-width="1"/>
+          <circle cx="254" cy="120" r="5" fill="#f6f1e2" stroke="#241e14" stroke-width="1.5"/>
+          <text x="254" y="192" text-anchor="middle" font-size="12" fill="#6a5f4b">合计 <tspan class="g-num">71.85</tspan></text>
+        </g>
+        <!-- 付费投放 180.00 → x=546（轴上方，越线标红） -->
+        <g>
+          <line x1="546" y1="120" x2="546" y2="56" stroke="#a03022" stroke-width="1.5"/>
+          <circle cx="546" cy="120" r="6" fill="#a03022"/>
+          <text x="556" y="48" text-anchor="end" font-size="13" font-weight="bold" fill="#a03022">付费投放 <tspan class="g-num">180.00</tspan> 已越线</text>
+        </g>
+      </svg>
+      <figcaption>四个取值均来自渠道表现表；160 元警戒线出自本周结论与风险第 1 条。数值见 <a href="#channel-table">渠道表现表</a>。</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 四版 · 下周行动 ============ -->
+  <section id="sec-actions" aria-labelledby="h-actions">
+    <h2 id="h-actions">下周行动</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">优先级</th>
+            <th scope="col">行动</th>
+            <th scope="col">负责人</th>
+            <th scope="col">截止日期</th>
+            <th scope="col">验收依据</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>P0</td><td>修复移动端报名按钮被键盘遮挡</td><td>林珂</td><td>9 月 30 日</td><td>iOS 与 Android 均可完成报名</td></tr>
+          <tr><td>P1</td><td>邮件发送时间 A/B 测试</td><td>许宁</td><td>10 月 2 日</td><td>每组至少 200 次访问，比较有效报名转化率</td></tr>
+          <tr><td>P1</td><td>付费渠道暂停低转化素材</td><td>陈澄</td><td>10 月 1 日</td><td>保留素材单次报名成本不超过 160 元</td></tr>
+          <tr><td>P2</td><td>发布讲师访谈与课程片段</td><td>周岚</td><td>10 月 3 日</td><td>两篇内容上线且归因链接可用</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>执行前检查：</p>
+    <ul class="checklist">
+      <li><span class="box" aria-hidden="true"></span>确认移动端修复已上线。</li>
+      <li><span class="box" aria-hidden="true"></span>校验邮件退订入口和授权名单。</li>
+      <li><span class="box" aria-hidden="true"></span>检查报名表与归因参数。</li>
+      <li><span class="box" aria-hidden="true"></span>准备取消活动时的退款说明。</li>
+    </ul>
+  </section>
+
+  <!-- ============ 五版 · 预算调整 ============ -->
+  <section id="sec-budget" aria-labelledby="h-budget">
+    <h2 id="h-budget">预算调整</h2>
+    <p>下周预算上限 12,000 元。建议分配：邮件 2,400 元、内容社区 4,800 元、付费投放 4,800 元。</p>
+    <p>预算估算仅用于讨论，不构成效果承诺。历史单次报名成本不能直接当作未来成本；增加预算可能改变受众质量。</p>
+
+    <figure data-enhancement>
+      <span class="enh-tag">示意 · 本周费用出自「渠道表现」表，建议分配出自本节，单位：元</span>
+      <div class="budget-legend">
+        <span><span class="swatch actual"></span>本周费用</span>
+        <span><span class="swatch plan"></span>下周建议分配</span>
+      </div>
+      <div class="budget-row">
+        <div class="b-label">邮件</div>
+        <div class="b-pair"><span class="b-key">本周</span><span class="b-track"><span class="b-fill actual" style="width:17.1%"></span></span><span class="b-val">1,480</span></div>
+        <div class="b-pair"><span class="b-key">下周</span><span class="b-track"><span class="b-fill plan" style="width:27.8%"></span></span><span class="b-val">2,400</span></div>
+      </div>
+      <div class="budget-row">
+        <div class="b-label">内容社区</div>
+        <div class="b-pair"><span class="b-key">本周</span><span class="b-track"><span class="b-fill actual" style="width:35.9%"></span></span><span class="b-val">3,100</span></div>
+        <div class="b-pair"><span class="b-key">下周</span><span class="b-track"><span class="b-fill plan" style="width:55.6%"></span></span><span class="b-val">4,800</span></div>
+      </div>
+      <div class="budget-row">
+        <div class="b-label">付费投放</div>
+        <div class="b-pair"><span class="b-key">本周</span><span class="b-track"><span class="b-fill actual" style="width:100%"></span></span><span class="b-val">8,640</span></div>
+        <div class="b-pair"><span class="b-key">下周</span><span class="b-track"><span class="b-fill plan" style="width:55.6%"></span></span><span class="b-val">4,800</span></div>
+      </div>
+      <figcaption>条长按同一比例绘制（最大值 8,640 元 = 满宽），为示意比较。本周费用合计 13,220 元；下周建议合计 12,000 元，即预算上限。预算估算仅用于讨论，不构成效果承诺。</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 六版 · 风险与停止条件 ============ -->
+  <section id="sec-risks" aria-labelledby="h-risks">
+    <h2 id="h-risks">风险与停止条件</h2>
+    <ol>
+      <li>若付费渠道连续两天单次报名成本超过 160 元，暂停该组素材并复核归因。</li>
+      <li>若报名表出现数据丢失，立即停止投放，修复后才恢复。</li>
+      <li>活动名单只用于本次通知，不转交其他渠道，不展示个人联系方式。</li>
+    </ol>
+    <blockquote>
+      <p>本周优先解决报名流程的问题，而不是继续购买更多流量。</p>
+      <footer data-enhancement>—— 本周按语（栏目名为演绎 · 示意）</footer>
+    </blockquote>
+  </section>
+
+  <!-- ============ 七版 · 评审问题 ============ -->
+  <section id="sec-review" aria-labelledby="h-review">
+    <h2 id="h-review">评审问题</h2>
+    <ul>
+      <li>是否批准将付费预算从 8,640 元降至 4,800 元？</li>
+      <li>是否由产品团队优先处理移动端报名障碍？</li>
+      <li>是否在 10 月 5 日复核渠道结构与有效报名质量？</li>
+    </ul>
+  </section>
+
+</main>
+
+<footer class="colophon" data-enhancement>
+  本页由 Markdown 周报转制为单文件 HTML，可离线阅读。刊头、付印日、目次、进度条、警戒线刻度与预算对照条为增强表达（data-enhancement），均有原文依据并以「示意」自明；正文与各版内容保持原文不变。
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  // 目次当前位置指示（scrollspy）：仅增强定位，不影响内容
+  var links = Array.prototype.slice.call(document.querySelectorAll(".toc a[href^='#']"));
+  if (!links.length || !("IntersectionObserver" in window)) { return; }
+  var map = new Map();
+  links.forEach(function (a) {
+    var sec = document.getElementById(a.getAttribute("href").slice(1));
+    if (sec) { map.set(sec, a); }
+  });
+  var current = null;
+  function setCurrent(link) {
+    if (current === link) { return; }
+    if (current) { current.removeAttribute("aria-current"); }
+    current = link;
+    if (current) { current.setAttribute("aria-current", "true"); }
+  }
+  var visible = new Set();
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { visible.add(e.target); } else { visible.delete(e.target); }
+    });
+    if (!visible.size) { return; }
+    var top = null;
+    visible.forEach(function (sec) {
+      if (!top || sec.getBoundingClientRect().top < top.getBoundingClientRect().top) { top = sec; }
+    });
+    if (top && map.has(top)) { setCurrent(map.get(top)); }
+  }, { rootMargin: "-3.5rem 0px -55% 0px", threshold: 0 });
+  map.forEach(function (_, sec) { observer.observe(sec); });
+})();
+</script>
+</body>
+</html>

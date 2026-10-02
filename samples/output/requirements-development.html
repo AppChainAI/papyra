@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>文档导出任务：需求与验收规格</title>
+<style>
+  :root{
+    --paper:#123058;
+    --paper-deep:#0d2547;
+    --panel:#173a6b;
+    --grid-line:rgba(140,190,240,.07);
+    --ink:#e9f1fb;
+    --ink-dim:#b4c8e4;
+    --line:rgba(147,196,244,.38);
+    --line-soft:rgba(147,196,244,.2);
+    --accent:#93d8ff;
+    --warn:#ffcf7d;
+    --focus:#ffe08a;
+    --font-label:"FangSong","STFangsong","仿宋",serif;
+    --font-body:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans CJK SC",sans-serif;
+    --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid-line) 1px,transparent 1px),
+      linear-gradient(rgba(140,190,240,.045) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(140,190,240,.045) 1px,transparent 1px);
+    background-size:120px 120px,120px 120px,24px 24px,24px 24px;
+    color:var(--ink);
+    font-family:var(--font-body);
+    font-size:17px;
+    line-height:1.7;
+  }
+  ::selection{background:#2c5a9e;color:#fff}
+  a{color:var(--accent)}
+  a:hover{text-decoration-thickness:2px}
+  :focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:2px}
+  code{
+    font-family:var(--font-mono);
+    font-size:.92em;
+    background:rgba(147,216,255,.12);
+    border:1px solid var(--line-soft);
+    border-radius:3px;
+    padding:.05em .35em;
+    font-variant-numeric:tabular-nums;
+  }
+  .skip{
+    position:absolute;left:-9999px;top:0;
+    background:var(--paper-deep);color:var(--ink);
+    padding:.5em 1em;z-index:50;border:1px solid var(--line);
+  }
+  .skip:focus{left:0}
+
+  /* ---------- 图签栏（概念首屏，增强节点） ---------- */
+  .drawing-head{
+    border-bottom:2px solid var(--line);
+    padding:20px 20px 0;
+  }
+  .titleblock{
+    max-width:1180px;margin:0 auto;
+    border:1.5px solid var(--line);
+    display:grid;
+    grid-template-columns:1fr;
+    background:rgba(13,37,71,.45);
+  }
+  .tb-cell{
+    padding:10px 16px;
+    border-bottom:1px solid var(--line-soft);
+  }
+  .tb-cell:last-child{border-bottom:none}
+  .tb-label{
+    display:block;
+    font-family:var(--font-label);
+    font-size:.78rem;
+    letter-spacing:.35em;
+    color:var(--ink-dim);
+    margin-bottom:2px;
+  }
+  .tb-title{
+    font-family:var(--font-label);
+    font-size:1.65rem;
+    line-height:1.3;
+    letter-spacing:.04em;
+    margin:0;
+    color:var(--ink);
+  }
+  .tb-meta{
+    font-family:var(--font-label);
+    font-size:1rem;
+    margin:0;
+    color:var(--ink);
+  }
+  .tb-no{
+    font-family:var(--font-mono);
+    font-size:.85rem;
+    color:var(--accent);
+  }
+  .tb-note{
+    font-size:.8rem;color:var(--ink-dim);margin-left:.5em;font-family:var(--font-body);
+  }
+  .tb-status{
+    display:inline-block;
+    font-family:var(--font-label);
+    border:1px solid var(--warn);
+    color:var(--warn);
+    padding:.1em .7em;
+    font-size:.85rem;
+    letter-spacing:.15em;
+    border-radius:2px;
+  }
+  @media(min-width:760px){
+    .titleblock{grid-template-columns:2fr 1.4fr 1fr}
+    .tb-cell{border-bottom:none;border-right:1px solid var(--line-soft)}
+    .tb-cell:last-child{border-right:none}
+  }
+
+  /* ---------- 布局 ---------- */
+  .sheet{
+    max-width:1180px;margin:0 auto;
+    padding:0 20px 80px;
+    display:block;
+  }
+  @media(min-width:1024px){
+    .sheet{
+      display:grid;
+      grid-template-columns:230px minmax(0,1fr);
+      gap:48px;
+      align-items:start;
+    }
+  }
+
+  /* ---------- 目录（增强节点） ---------- */
+  .toc{
+    padding:18px 0 6px;
+  }
+  .toc-title{
+    font-family:var(--font-label);
+    font-size:.8rem;letter-spacing:.35em;
+    color:var(--ink-dim);
+    margin:0 0 8px;
+  }
+  .toc ol{
+    list-style:none;margin:0;padding:0;
+    display:flex;gap:6px;
+    overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .toc a{
+    display:block;white-space:nowrap;
+    font-family:var(--font-label);
+    font-size:.92rem;
+    color:var(--ink-dim);
+    text-decoration:none;
+    border:1px solid var(--line-soft);
+    border-radius:2px;
+    padding:.25em .7em;
+  }
+  .toc a:hover{color:var(--ink);border-color:var(--line)}
+  .toc a[aria-current="true"]{
+    color:var(--paper-deep);
+    background:var(--accent);
+    border-color:var(--accent);
+  }
+  @media(min-width:1024px){
+    .toc{position:sticky;top:24px;padding-top:32px}
+    .toc ol{flex-direction:column;overflow:visible;gap:2px}
+    .toc a{border:none;border-left:2px solid var(--line-soft);border-radius:0;padding:.3em .9em}
+    .toc a[aria-current="true"]{color:var(--accent);background:none;border-left-color:var(--accent)}
+  }
+
+  /* ---------- 正文 ---------- */
+  main{min-width:0}
+  .doc{
+    max-width:44em;
+    padding-top:8px;
+  }
+  section{margin-top:3.2em}
+  h2{
+    font-family:var(--font-label);
+    font-size:1.45rem;
+    line-height:1.3;
+    letter-spacing:.06em;
+    margin:0 0 .7em;
+    padding-bottom:.35em;
+    border-bottom:1.5px solid var(--line);
+    color:var(--ink);
+    scroll-margin-top:20px;
+  }
+  h3{
+    font-family:var(--font-label);
+    font-size:1.12rem;
+    line-height:1.35;
+    letter-spacing:.08em;
+    margin:1.6em 0 .5em;
+    color:var(--accent);
+    scroll-margin-top:20px;
+  }
+  p{margin:.9em 0}
+  ul,ol{padding-left:1.5em;margin:.9em 0}
+  li{margin:.35em 0}
+
+  /* 表格 */
+  .table-wrap{overflow-x:auto;margin:1em 0;max-width:100%}
+  table{
+    border-collapse:collapse;
+    min-width:34em;
+    font-size:.95rem;
+    line-height:1.6;
+  }
+  th,td{
+    border:1px solid var(--line);
+    padding:.5em .9em;
+    text-align:left;
+    vertical-align:top;
+  }
+  th{
+    font-family:var(--font-label);
+    letter-spacing:.1em;
+    background:rgba(147,216,255,.08);
+    color:var(--accent);
+    white-space:nowrap;
+  }
+  td code{white-space:nowrap}
+
+  /* 验收清单（原文任务列表） */
+  .checklist{list-style:none;padding-left:0}
+  .checklist li{display:flex;gap:.6em;align-items:baseline;margin:.5em 0}
+  .checklist input{
+    width:1em;height:1em;
+    accent-color:var(--accent);
+    flex:none;transform:translateY(.1em);
+  }
+
+  /* 代码块 */
+  figure.code{
+    margin:1.1em 0;
+    position:relative;
+    border:1px solid var(--line);
+    background:var(--paper-deep);
+    border-radius:3px;
+  }
+  figure.code pre{
+    margin:0;
+    padding:1em 1.2em;
+    overflow-x:auto;
+  }
+  figure.code code{
+    background:none;border:none;padding:0;
+    font-size:.88rem;
+    line-height:1.65;
+    color:var(--ink);
+  }
+  .copy-btn{
+    position:absolute;top:6px;right:6px;
+    font-family:var(--font-label);
+    font-size:.8rem;letter-spacing:.1em;
+    color:var(--ink-dim);
+    background:rgba(23,58,107,.9);
+    border:1px solid var(--line-soft);
+    border-radius:2px;
+    padding:.2em .8em;
+    cursor:pointer;
+  }
+  .copy-btn:hover{color:var(--ink);border-color:var(--line)}
+  .copy-msg{
+    font-size:.8rem;
+    padding:0 1.2em .6em;
+    margin:0;
+    min-height:1.2em;
+    color:var(--accent);
+  }
+  .copy-msg.err{color:var(--warn)}
+
+  /* ---------- 状态示意图（增强节点） ---------- */
+  .schematic{
+    margin:1.4em 0;
+    border:1.5px solid var(--line);
+    background:rgba(13,37,71,.5);
+    border-radius:3px;
+    padding:14px 14px 10px;
+    max-width:760px;
+  }
+  .schematic figcaption{
+    font-family:var(--font-label);
+    font-size:.85rem;
+    letter-spacing:.12em;
+    color:var(--ink-dim);
+    margin:0 0 8px;
+  }
+  .schematic svg{width:100%;height:auto;display:block}
+  .schematic .edge{
+    fill:none;stroke:var(--accent);
+    stroke-width:1.6;opacity:.85;
+  }
+  .schematic .edge.retry{
+    stroke:var(--warn);stroke-dasharray:6 5;
+  }
+  .schematic .node-box{
+    fill:var(--panel);
+    stroke:var(--accent);
+    stroke-width:1.6;
+  }
+  .schematic .node-outer{
+    fill:none;stroke:var(--accent);
+    stroke-width:1.2;opacity:.8;
+  }
+  .schematic .node text{
+    fill:var(--ink);
+    font-family:var(--font-mono);
+    font-size:15px;
+    text-anchor:middle;
+    dominant-baseline:central;
+  }
+  .schematic .node{cursor:pointer}
+  .schematic .node:hover .node-box,
+  .schematic .node:focus-visible .node-box{fill:#1f4a86}
+  .schematic .node:focus-visible{outline:none}
+  .schematic .node:focus-visible .node-box{stroke:var(--focus);stroke-width:2.5}
+  .schematic .node.active .node-box{fill:#2c5a9e;stroke:var(--focus)}
+  .schematic .svg-note{
+    fill:var(--warn);
+    font-family:var(--font-label);
+    font-size:12px;
+    text-anchor:middle;
+  }
+  .schematic-legend{
+    font-size:.82rem;color:var(--ink-dim);
+    margin:6px 2px 0;
+  }
+  .state-panel{
+    margin-top:10px;
+    border-top:1px dashed var(--line);
+    padding-top:8px;
+    font-size:.92rem;
+    line-height:1.7;
+  }
+  .state-panel dl{
+    display:grid;
+    grid-template-columns:6.5em 1fr;
+    gap:2px 12px;
+    margin:0;
+  }
+  .state-panel dt{
+    font-family:var(--font-label);
+    color:var(--ink-dim);
+    letter-spacing:.15em;
+    font-size:.85rem;
+  }
+  .state-panel dd{margin:0}
+  .state-panel .sp-state{font-family:var(--font-mono);color:var(--accent)}
+
+  footer.sheet-foot{
+    max-width:1180px;margin:0 auto;
+    padding:24px 20px 40px;
+    border-top:1px solid var(--line-soft);
+    font-size:.8rem;color:var(--ink-dim);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{transition:none !important;animation:none !important}
+  }
+
+  @media print{
+    body{background:#fff;color:#111;font-size:12pt}
+    .drawing-head,.toc,.copy-btn,.copy-msg,footer.sheet-foot,.skip{display:none}
+    .sheet{display:block;padding:0}
+    .schematic{border-color:#666;background:#fff;color:#111}
+    .schematic .node-box{fill:#fff;stroke:#333}
+    .schematic .node text{fill:#111}
+    .schematic .edge{stroke:#333}
+    .schematic .edge.retry{stroke:#555}
+    .schematic .svg-note{fill:#333}
+    h2,h3,th{color:#111;border-color:#666}
+    th,td{border-color:#666}
+    code{background:none;border-color:#999;color:#111}
+    figure.code{border-color:#666;background:#fff}
+    figure.code code{color:#111}
+    a{color:#111}
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">跳至正文</a>
+
+<header class="drawing-head" data-enhancement>
+  <div class="titleblock" role="group" aria-label="图签">
+    <div class="tb-cell">
+      <span class="tb-label">图名</span>
+      <h1 class="tb-title">文档导出任务：需求与验收规格</h1>
+      <p class="tb-meta">版本：0.3。负责人：沈禾。计划评审：2026 年 10 月 6 日。</p>
+    </div>
+    <div class="tb-cell">
+      <span class="tb-label">图签编号</span>
+      <span class="tb-no">EXP-SPEC-0.3</span><span class="tb-note">（编号为示意演绎，源自版本号）</span>
+      <br>
+      <span class="tb-label" style="margin-top:8px">图纸性质</span>
+      <span class="tb-status">需求规格 · 待评审</span>
+    </div>
+    <div class="tb-cell">
+      <span class="tb-label">读图说明</span>
+      <p style="font-size:.82rem;line-height:1.65;margin:0;color:var(--ink-dim)">
+        本页按工程蓝图组织：状态约束绘为线路示意，接口与验收按图签检索。正文保持原文顺序，可连续阅读。
+      </p>
+    </div>
+  </div>
+</header>
+
+<div class="sheet">
+  <nav class="toc" data-enhancement aria-label="本页目录">
+    <p class="toc-title">图纸索引</p>
+    <ol>
+      <li><a href="#sec-goal">问题与目标</a></li>
+      <li><a href="#sec-story">用户故事</a></li>
+      <li><a href="#sec-scope">范围</a></li>
+      <li><a href="#sec-state">状态与约束</a></li>
+      <li><a href="#sec-api">接口草案</a></li>
+      <li><a href="#sec-accept">验收清单</a></li>
+      <li><a href="#sec-test">测试用例</a></li>
+      <li><a href="#sec-release">发布门槛</a></li>
+      <li><a href="#sec-open">未决事项</a></li>
+    </ol>
+  </nav>
+
+  <main id="main">
+    <article class="doc">
+
+      <section id="sec-goal">
+        <h2>问题与目标</h2>
+        <p>用户需要把一份 Markdown 文档导出成可离线阅读的 HTML。当前人工复制内容会丢失图片与代码格式，也无法确定生成过程中是否遗漏章节。</p>
+        <p>本期交付单文档导出：保留内容、明确进度、失败可重试，且不覆盖已有有效文件。本文是需求规格，不表示功能已实现。</p>
+      </section>
+
+      <section id="sec-story">
+        <h2>用户故事</h2>
+        <p>作为项目负责人，我希望把需求文档导出为一个 HTML 文件，发给没有开发环境的同事；对方断网后仍能阅读正文、图片与代码。</p>
+      </section>
+
+      <section id="sec-scope">
+        <h2>范围</h2>
+        <h3>本期包含</h3>
+        <ul>
+          <li>Markdown 文件与同目录中的关联图片。</li>
+          <li>单个 HTML 输出，内嵌样式、脚本和必要图片。</li>
+          <li>任务状态查询、失败原因展示和手动重试。</li>
+          <li>同名文件冲突确认与临时文件原子替换。</li>
+        </ul>
+        <h3>本期不包含</h3>
+        <ul>
+          <li>PDF、扫描件 OCR 与批量导出。</li>
+          <li>多用户协同、在线发布与远程图片下载。</li>
+          <li>自动修改原文、翻译正文或事实补全。</li>
+        </ul>
+      </section>
+
+      <section id="sec-state">
+        <h2>状态与约束</h2>
+
+        <figure class="schematic" data-enhancement aria-labelledby="schematic-cap">
+          <figcaption id="schematic-cap">状态线路示意 · 依据下方「状态与约束」表绘制，点选站点查看约束；为示意，不代表运行结果</figcaption>
+          <svg viewBox="0 0 760 330" role="group" aria-label="状态转换示意图：queued 可转到 running 或 cancelled；running 可转到 succeeded、failed 或 cancelled；failed 经重试创建新任务">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#93d8ff"></path>
+              </marker>
+              <marker id="arrow-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,0 L10,5 L0,10 z" fill="#ffcf7d"></path>
+              </marker>
+            </defs>
+            <!-- edges -->
+            <path class="edge" d="M150,150 L280,150" marker-end="url(#arrow)"></path>
+            <path class="edge" d="M112,172 C140,292 500,288 570,256" marker-end="url(#arrow)"></path>
+            <path class="edge" d="M380,140 C470,112 520,82 570,74" marker-end="url(#arrow)"></path>
+            <path class="edge" d="M380,156 C470,158 480,160 570,161" marker-end="url(#arrow)"></path>
+            <path class="edge" d="M380,168 C480,212 500,240 570,248" marker-end="url(#arrow)"></path>
+            <path class="edge retry" d="M600,182 C580,322 160,322 106,174" marker-end="url(#arrow-warn)"></path>
+            <text class="svg-note" x="350" y="318">重试创建新任务（示意）</text>
+            <!-- nodes -->
+            <g class="node" data-state="queued" tabindex="0" role="button" aria-label="状态 queued：已接收，尚未执行；允许的后续状态：running、cancelled">
+              <rect class="node-box" x="54" y="130" width="96" height="40" rx="5"></rect>
+              <text x="102" y="151">queued</text>
+            </g>
+            <g class="node" data-state="running" tabindex="0" role="button" aria-label="状态 running：正在生成与校验；允许的后续状态：succeeded、failed、cancelled">
+              <rect class="node-box" x="284" y="130" width="96" height="40" rx="5"></rect>
+              <text x="332" y="151">running</text>
+            </g>
+            <g class="node" data-state="succeeded" tabindex="0" role="button" aria-label="状态 succeeded：校验通过并交付文件；终态，无后续状态">
+              <rect class="node-outer" x="566" y="44" width="108" height="48" rx="7"></rect>
+              <rect class="node-box" x="572" y="50" width="96" height="36" rx="5"></rect>
+              <text x="620" y="69">succeeded</text>
+            </g>
+            <g class="node" data-state="failed" tabindex="0" role="button" aria-label="状态 failed：生成或校验失败；终态，重试创建新任务">
+              <rect class="node-outer" x="566" y="137" width="108" height="48" rx="7"></rect>
+              <rect class="node-box" x="572" y="143" width="96" height="36" rx="5"></rect>
+              <text x="620" y="162">failed</text>
+            </g>
+            <g class="node" data-state="cancelled" tabindex="0" role="button" aria-label="状态 cancelled：用户取消，未交付文件；终态，无后续状态">
+              <rect class="node-outer" x="566" y="224" width="108" height="48" rx="7"></rect>
+              <rect class="node-box" x="572" y="230" width="96" height="36" rx="5"></rect>
+              <text x="620" y="249">cancelled</text>
+            </g>
+          </svg>
+          <p class="schematic-legend">双线框＝后续状态为「无」的终态；黄色虚线＝重试路径（示意，重试创建新任务而非回到原任务）。</p>
+          <div class="state-panel" id="state-panel" aria-live="polite">
+            <dl>
+              <dt>当前站点</dt><dd class="sp-state" id="sp-state">未选择</dd>
+              <dt>含义</dt><dd id="sp-meaning">点选上方任一状态，此处显示其在规格中的含义与允许的后续状态（内容取自下表）。</dd>
+              <dt>后续状态</dt><dd id="sp-next">—</dd>
+            </dl>
+          </div>
+        </figure>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>状态</th><th>含义</th><th>允许的后续状态</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>queued</td><td>已接收，尚未执行</td><td>running、cancelled</td></tr>
+              <tr><td>running</td><td>正在生成与校验</td><td>succeeded、failed、cancelled</td></tr>
+              <tr><td>succeeded</td><td>校验通过并交付文件</td><td>无</td></tr>
+              <tr><td>failed</td><td>生成或校验失败</td><td>无；重试创建新任务</td></tr>
+              <tr><td>cancelled</td><td>用户取消，未交付文件</td><td>无</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>取消与成功同时发生时，以服务端完成交付的原子提交点为准。成功提交之前收到取消，不得交付；提交之后取消返回“任务已完成”。</p>
+      </section>
+
+      <section id="sec-api">
+        <h2>接口草案</h2>
+        <p>以下接口用于评审，不是当前可用 API。</p>
+
+        <figure class="code">
+          <button type="button" class="copy-btn" data-enhancement data-copy>复制</button>
+          <pre><code>POST /api/exports
+Content-Type: application/json
+
+{
+  "source": "docs/spec.md",
+  "output": "exports/spec.html",
+  "overwrite": false
+}</code></pre>
+          <p class="copy-msg" data-enhancement aria-live="polite"></p>
+        </figure>
+
+        <p>接收成功返回 <code>202 Accepted</code>：</p>
+
+        <figure class="code">
+          <button type="button" class="copy-btn" data-enhancement data-copy>复制</button>
+          <pre><code>{
+  "id": "exp_7f32",
+  "state": "queued"
+}</code></pre>
+          <p class="copy-msg" data-enhancement aria-live="polite"></p>
+        </figure>
+
+        <p>错误边界：</p>
+        <ul>
+          <li><code>400</code>：路径或参数不合法。</li>
+          <li><code>404</code>：源文件不存在。</li>
+          <li><code>409</code>：目标文件已存在，且未确认覆盖。</li>
+          <li><code>422</code>：图片缺失或文档超出支持边界。</li>
+          <li><code>503</code>：生成 agent 不可用。</li>
+        </ul>
+        <p>相对路径以工作区根目录解析。拒绝路径穿越及通过符号链接逃逸工作区；不能仅检查字符串前缀。</p>
+      </section>
+
+      <section id="sec-accept">
+        <h2>验收清单</h2>
+        <ul class="checklist">
+          <li><input type="checkbox" disabled id="c1"><label for="c1">断网打开 HTML，正文、图片和必要交互正常。</label></li>
+          <li><input type="checkbox" disabled id="c2"><label for="c2">标题、段落、表格、代码与链接没有静默遗漏。</label></li>
+          <li><input type="checkbox" disabled id="c3"><label for="c3">源文件及图片的内容哈希不变。</label></li>
+          <li><input type="checkbox" disabled id="c4"><label for="c4">未确认覆盖时，原有输出文件保持不变。</label></li>
+          <li><input type="checkbox" disabled id="c5"><label for="c5">agent 失败后清理临时文件，保留已有有效产物。</label></li>
+          <li><input type="checkbox" disabled id="c6"><label for="c6">取消任务不会留下冒充成功的半成品。</label></li>
+          <li><input type="checkbox" disabled id="c7"><label for="c7">路径穿越与符号链接逃逸被拒绝。</label></li>
+          <li><input type="checkbox" disabled id="c8"><label for="c8">390 像素宽度与键盘操作下可以阅读和使用。</label></li>
+        </ul>
+      </section>
+
+      <section id="sec-test">
+        <h2>测试用例</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>编号</th><th>输入或操作</th><th>预期结果</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>T01</td><td>包含中文标题、表格与代码的 Markdown</td><td>内容完整，排版可读</td></tr>
+              <tr><td>T02</td><td>图片路径为 <code>./assets/flow.png</code></td><td>图片内嵌，离线显示</td></tr>
+              <tr><td>T03</td><td>输出文件已存在且 overwrite=false</td><td>返回 409，原文件不变</td></tr>
+              <tr><td>T04</td><td>源路径为 <code>../private.md</code></td><td>拒绝访问，不读取文件</td></tr>
+              <tr><td>T05</td><td>agent 生成中崩溃</td><td>状态 failed，保留原有有效文件</td></tr>
+              <tr><td>T06</td><td>原子提交前取消</td><td>状态 cancelled，不交付输出</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="sec-release">
+        <h2>发布门槛</h2>
+        <p>T01–T06 全部通过后才能发布。禁止以“HTML 文件已生成”替代验收，也不得将界面里的本地勾选视为真实测试执行结果。</p>
+      </section>
+
+      <section id="sec-open">
+        <h2>未决事项</h2>
+        <ol>
+          <li>最大文档长度与单张图片大小需要用真实样本测量后确定。</li>
+          <li>agent 超时时间及中断方式由首次集成结果决定。</li>
+          <li>接口错误码属于草案，客户端与服务端需在实现前共同确认。</li>
+        </ol>
+      </section>
+
+    </article>
+  </main>
+</div>
+
+<footer class="sheet-foot" data-enhancement>
+  本阅读页由需求规格文档生成；图签编号与状态线路为示意演绎，规格内容以正文为准。
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* 目录当前位置 */
+  var links = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
+  var sections = links.map(function(a){
+    return document.querySelector(a.getAttribute("href"));
+  }).filter(Boolean);
+  function setCurrent(id){
+    links.forEach(function(a){
+      if(a.getAttribute("href") === "#" + id){
+        a.setAttribute("aria-current","true");
+      }else{
+        a.removeAttribute("aria-current");
+      }
+    });
+  }
+  if("IntersectionObserver" in window && sections.length){
+    var visible = {};
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        visible[e.target.id] = e.isIntersecting;
+      });
+      for(var i = 0; i < sections.length; i++){
+        if(visible[sections[i].id]){ setCurrent(sections[i].id); return; }
+      }
+    }, {rootMargin:"-10% 0px -70% 0px"});
+    sections.forEach(function(s){ io.observe(s); });
+    setCurrent(sections[0].id);
+  }
+
+  /* 状态线路：点选站点查看约束（内容取自规格原表） */
+  var STATES = {
+    queued:   { meaning: "已接收，尚未执行",     next: "running、cancelled" },
+    running:  { meaning: "正在生成与校验",       next: "succeeded、failed、cancelled" },
+    succeeded:{ meaning: "校验通过并交付文件",   next: "无" },
+    failed:   { meaning: "生成或校验失败",       next: "无；重试创建新任务" },
+    cancelled:{ meaning: "用户取消，未交付文件", next: "无" }
+  };
+  var spState = document.getElementById("sp-state");
+  var spMeaning = document.getElementById("sp-meaning");
+  var spNext = document.getElementById("sp-next");
+  var nodes = Array.prototype.slice.call(document.querySelectorAll(".schematic .node"));
+  function selectState(name){
+    var info = STATES[name];
+    if(!info) return;
+    nodes.forEach(function(n){
+      n.classList.toggle("active", n.getAttribute("data-state") === name);
+    });
+    spState.textContent = name;
+    spMeaning.textContent = info.meaning;
+    spNext.textContent = info.next;
+  }
+  nodes.forEach(function(n){
+    n.addEventListener("click", function(){
+      selectState(n.getAttribute("data-state"));
+    });
+    n.addEventListener("keydown", function(ev){
+      if(ev.key === "Enter" || ev.key === " "){
+        ev.preventDefault();
+        selectState(n.getAttribute("data-state"));
+      }
+    });
+  });
+
+  /* 代码复制：反馈贴近操作，失败如实报告 */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-copy]"), function(btn){
+    btn.addEventListener("click", function(){
+      var fig = btn.closest("figure");
+      var code = fig ? fig.querySelector("code") : null;
+      var msg = fig ? fig.querySelector(".copy-msg") : null;
+      if(!code || !msg) return;
+      var text = code.textContent;
+      function ok(){ msg.textContent = "已复制到剪贴板"; msg.classList.remove("err"); }
+      function fail(){ msg.textContent = "复制失败，请直接选中代码手动复制"; msg.classList.add("err"); }
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(ok, fail);
+      }else{
+        try{
+          var ta = document.createElement("textarea");
+          ta.value = text;
+          ta.style.position = "fixed";
+          ta.style.opacity = "0";
+          document.body.appendChild(ta);
+          ta.select();
+          var done = document.execCommand("copy");
+          document.body.removeChild(ta);
+          done ? ok() : fail();
+        }catch(e){ fail(); }
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>
