@@ -1,5 +1,17 @@
 # Third-party notices
 
+## Impeccable
+
+`references/visual-design.md` and `references/acceptance.md` contain material adapted from Impeccable's reading-mode, typography, layout, polish, and bounded-verification guidance. Papyra changes the guidance for Chinese document reading, system fonts, offline single-file output, and source-content fidelity; it does not bundle Impeccable's engine or launcher.
+
+- Source: https://github.com/pbakaus/impeccable
+- Reference commit: 508d7e8955de3b3caf2d8676e85206723d41a887
+- Source files: `skill/SKILL.src.md`, `skill/reference/mode-read.md`, `skill/reference/typeset.md`, `skill/reference/layout.md`, `skill/reference/polish.md`
+- Copyright 2025 Paul Bakaus
+- License: Apache License 2.0; the complete license is distributed in [licenses/impeccable-Apache-2.0.txt](licenses/impeccable-Apache-2.0.txt).
+
+The license applies to the adapted Impeccable material, not as a license declaration for the entire Papyra repository. Upstream `NOTICE.md` concerns iOS and Android references derived from ehmo's platform-design-skills; those references are not included or adapted here.
+
 ## oil-ui
 
 `references/visual-design.md` contains material adapted from this source.
