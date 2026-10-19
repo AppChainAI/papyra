@@ -1,0 +1,67 @@
+# 自动重点标注
+
+生成时由 Agent 选择原文重点，浏览器用随包的 Rough Notation 绘制。无需运行时模型调用、npm 安装或 CDN。标注服务于阅读，不代替原文，也不代表独立核验结论。
+
+## 1. 选定原文
+
+优先标注影响行动的结论、限制、风险和关键数字。每节通常 0–2 处，不是配额；已有醒目表达时可不标。保留单位、否定词与必要条件；一般选择短语或关键分句，而不是整段。原文代码、链接及复杂表格保持原样。
+
+生成正文时直接用普通行内 span 包裹确切原文：
+
+```html
+<p>若<span data-notation="underline">连续两天成本超过 160 元，暂停该组素材</span>，并复核归因。</p>
+```
+
+该 span 是原文，不能带 `data-enhancement`。新增说明须放在独立增强节点中。仅使用以下类型，同一片段一种标注，标注节点不嵌套：
+
+- `underline`：关键分句，默认选择，支持跨行。
+- `highlight`：关键数字、概念或限制，使用浅色或半透明底色。
+- `circle`：极少数短词或数字；换行时脚本自动改为下划线。
+
+目标保持普通行内布局，以便按行测量。多行块级元素、CSS zoom 或缩放变换中的文字不使用手绘标注，改用普通 CSS 强调。默认无动画。
+
+## 2. 原样内嵌资源
+
+以下路径相对本参考文件；宿主读取实际文件内容，用文件操作原样内嵌，不让模型重新实现或概括库代码：
+
+1. 在 head 中内嵌 [annotations.css](../assets/annotations.css)，style 带 `data-enhancement="notation"`。页面主题变量放在该样式之后。
+2. 在 body 末尾先内嵌 [rough-notation-0.5.1.iife.js](../assets/rough-notation-0.5.1.iife.js)，再内嵌 [annotations.js](../assets/annotations.js)。两个 script 均带 `data-enhancement="notation"`，各内嵌一次；此时正文 DOM 已完整。
+3. 把 [MIT 完整许可](../licenses/rough-notation-MIT.txt)保留在 HTML 注释中，注明 Rough Notation 0.5.1。库的来源与校验值见 [第三方声明](../THIRD_PARTY_NOTICES.md)。
+
+生成页只有上述受信任的固定脚本和本次必要的交互逻辑。输入文字正确转义，不拼进 script。对最终内嵌内容检查 script/注释结束边界，离线移动单文件后验证无远程请求。
+
+## 3. 主题与退化
+
+默认线条跟随文字色，高亮为半透明灰底，文字继承页面。通过 CSS 变量适配页面概念，支持在 root 或局部容器设置：
+
+```css
+/* 浅底示例 */
+:root {
+  --notation-color: #a03022;
+  --notation-highlight: #ead69a;
+  --notation-highlight-ink: #241e14;
+}
+/* 深底示例：高亮背景与文字一起设置 */
+.dark-section {
+  --notation-color: #93d8ff;
+  --notation-highlight: #365577;
+  --notation-highlight-ink: #e9f1fb;
+}
+```
+
+调色后检查真实文字对比度与笔画遮挡。普通 CSS 强调在脚本禁用、库缺失或单处绘制失败时继续保留。成功绘制后该处才取消重复的屏幕 CSS 装饰；打印时隐藏手绘 SVG 并恢复 CSS 强调。SVG 自动带增强属性及 `aria-hidden`，原文仍可搜索、选择、复制。
+
+## 4. 动态布局
+
+脚本自动处理字体就绪、窗口 resize、资源 load 和原生 details toggle。自定义选项卡、展开、内容重排或主题切换完成后，调用统一刷新事件：
+
+```js
+// 先完成本次 DOM/主题更新，再请求刷新。
+document.dispatchEvent(new Event('papyra:refresh-annotations'));
+```
+
+刷新按帧合并，重用实例，不重复创建 SVG；刷新会重新读取主题颜色。异步渲染在提交 DOM 后调用，带高度过渡的布局在过渡完成后调用。初始化后只刷新已有目标；原文及全部标注 span 在加载脚本前生成，避免运行时再追加目标。
+
+## 5. 完成标准
+
+逐条核对选中的原文及上下文；剔除增强后原文不变。实际检查桌面、390px、320px、放大重排、隐藏再展开与自定义刷新后的对齐；深浅底色、无脚本退化和打印均保留可读强调。只做源码检查时明确说明未验证渲染；不要将库的成功绘制当成重点选择正确的证据。

@@ -8,7 +8,7 @@ Papyra 将文档交给用户本地已安装并配置的 coding agent，由 agent
 
 - **输入**：首版支持 Markdown 与关联本地图片，后续扩展 PDF 等格式。
 - **输出**：面向人类阅读的单文件 HTML，目标是可离线打开、内容保真、适配桌面与手机。
-- **设计**：根据内容组织排版和必要交互，不为交互而交互。
+- **设计**：根据内容组织排版和必要交互，不为交互而交互；自动选择少量原文重点，用随包 Rough Notation 添加圈点，资源内嵌、可离线阅读。
 - **Agent**：Skill 由具备文件读写能力的本地 coding agent 执行；CLI 后续逐步适配不同 agent。
 
 ## 安装与使用 Skill
@@ -47,7 +47,7 @@ CLI 依赖用户已经安装并配置好的本地 agent。文档是否发送至�
 
 ## 项目状态
 
-当前已提供自包含的 Papyra Skill 0.2.0。`samples/` 保留三份输入 Markdown 与 `output/` 下三份最终 HTML（蓝图、报刊号外、蓝图+线路示意），均为 fresh-context agent 仅凭 skill 文本独立生成，已做源码级保真核对与静态截图，浏览器交互未逐页实测。CLI 尚未实现。生成为同模型族，跨模型验证未做，不是独立质量评测。
+当前已提供自包含的 Papyra Skill 0.3.0。`samples/` 保留三份输入 Markdown 与 `output/` 下三份最终 HTML（报刊号外、蓝图+线路示意、空间蓝图）。本轮沿用现有版式，接入原文重点标注并重新检查全文、浏览器交互、手机布局、离线与打印；不是 fresh-context 重新设计或独立质量评测。CLI 尚未实现，跨模型验证未做。
 
 完整范围、质量要求、验收标准与待确定事项见 [需求文档](docs/requirements.md)。
 
@@ -57,19 +57,24 @@ HTML 可直接在浏览器中离线打开，无需安装依赖或启动服务器
 
 | 场景 | Markdown | HTML |
 | --- | --- | --- |
-| 市场运营 | [运营周报](samples/market-operations.md) | [渠道、行动与停止条件](samples/papyra/market-operations.html) |
-| 需求开发 | [需求与验收规格](samples/requirements-development.md) | [状态规则与用例关联](samples/papyra/requirements-development.html) |
-| 设计方案 | [社区阅读室方案](samples/design-proposal.md) | [方案取舍与空间约束](samples/papyra/design-proposal.html) |
+| 市场运营 | [运营周报](samples/market-operations.md) | [渠道、行动与停止条件](samples/output/market-operations.html) |
+| 需求开发 | [需求与验收规格](samples/requirements-development.md) | [状态规则与用例关联](samples/output/requirements-development.html) |
+| 设计方案 | [社区阅读室方案](samples/design-proposal.md) | [方案取舍与空间约束](samples/output/design-proposal.html) |
 
-三个页面分别采用运营复盘、技术规格与空间方案的阅读组织，在对应章节增加内容解释与交互。全文文字保真、离线打开、主要交互、键盘入口及桌面/手机溢出检查通过，详见 [Papyra Skill 测试报告](docs/papyra-skill-evaluation.md)。Impeccable 检测器仅用于可选开发验收，不是 Skill 或生成页面的运行依赖。
+三个页面分别采用运营复盘、技术规格与空间方案的阅读组织，在对应章节增加内容解释与交互。全文文字保真、离线打开、主要交互、键盘入口及桌面/手机溢出检查通过，详见 [0.3.0 三案例回测](docs/papyra-0.3.0-sample-retest.md)。Impeccable 检测器仅用于可选开发验收，不是 Skill 或生成页面的运行依赖。
 
 macOS 可直接打开，例如：
 
 ```sh
-open samples/papyra/market-operations.html
+open samples/output/market-operations.html
 ```
 
-检查脚本在 [`samples/papyra/check.mjs`](samples/papyra/check.mjs)。截图、打印 PDF 和检查结果可在本地重新生成，不纳入 Git。
+```sh
+node samples/build.mjs  # 按本轮选定重点内嵌最新标注资源，覆盖三例 output
+node samples/check.mjs  # 本机 Chrome 离线回归；其他安装路径可用 CHROME_PATH 指定
+```
+
+构建脚本只复现这三例的标注，不是通用 Markdown 转换器。检查需要 Node.js 22+ 和 Chrome，无需安装 npm 依赖；截图、打印 PDF 和检查结果保存在命令打印出的临时目录，不纳入 Git。
 
 ## Skill 结构
 
@@ -79,10 +84,18 @@ skills/papyra/
 ├── references/
 │   ├── content-design.md
 │   ├── visual-design.md
+│   ├── annotations.md
 │   └── acceptance.md
+├── assets/
+│   ├── rough-notation-0.5.1.iife.js
+│   ├── annotations.js
+│   └── annotations.css
 ├── licenses/
+│   ├── rough-notation-MIT.txt
 │   └── impeccable-Apache-2.0.txt
 └── THIRD_PARTY_NOTICES.md
 ```
 
-安装 `papyra` 会获得全部必要参考文件，不依赖本仓库的样本或测试工具。第三方材料的版权与许可声明随 Skill 一同分发。
+三例共用 Skill 的标注脚本与 CSS，单个输出 HTML 已包含全部必要资源。已有样本不是跨模型自动选重点的质量证明。
+
+安装 `papyra` 会获得全部必要参考文件和标注资源，不依赖本仓库的样本或测试工具。第三方材料的版权与许可声明随 Skill 一同分发。

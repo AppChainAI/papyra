@@ -347,24 +347,57 @@
     a { color: var(--ink); }
   }
 </style>
+<!-- papyra-annotations:start --><style data-enhancement="notation">
+:root {
+  --notation-color: currentColor;
+  --notation-highlight: rgba(127, 127, 127, .2);
+  --notation-highlight-ink: inherit;
+}
+[data-notation] {
+  text-decoration: underline;
+  text-decoration-color: var(--notation-color);
+  text-underline-offset: .18em;
+}
+[data-notation="highlight"] {
+  color: var(--notation-highlight-ink);
+  background: var(--notation-highlight);
+  text-decoration: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+@media screen {
+  [data-notation].notation-ready { text-decoration: none; background: transparent; }
+}
+@media print {
+  .rough-annotation { display: none !important; }
+  [data-notation] { text-decoration-color: currentColor; }
+  [data-notation="highlight"] {
+    color: inherit;
+    background: transparent;
+    text-decoration: underline;
+  }
+}
+
+:root { --notation-color:#1b4c7d; --notation-highlight:#dce7ef; --notation-highlight-ink:#1c2d3d; }
+</style><!-- papyra-annotations:end -->
 </head>
 <body>
 
 <div class="sheet-head-wrap">
   <header class="sheet-header">
-    <div class="title-block" role="group" aria-label="图签：项目基本信息">
-      <div class="tb-cell"><span class="tb-k">图签 · 项目地点</span><span class="tb-v">南岸社区二层</span></div>
-      <div class="tb-cell"><span class="tb-k">服务对象</span><span class="tb-v">居民、学生与远程工作者</span></div>
-      <div class="tb-cell"><span class="tb-k">方案评审</span><span class="tb-v num">2026 年 10 月 8 日</span></div>
-      <div class="tb-cell"><span class="tb-k">建筑面积</span><span class="tb-v num">96 平方米</span></div>
+    <div class="title-block" role="group" aria-label="图签：项目基本信息" data-source-meta>
+      <div class="tb-cell"><span class="tb-k">项目地点：</span><span class="tb-v">南岸社区二层。</span></div>
+      <div class="tb-cell"><span class="tb-k">服务对象：</span><span class="tb-v">居民、学生与远程工作者。</span></div>
+      <div class="tb-cell"><span class="tb-k">方案评审：</span><span class="tb-v num">2026 年 10 月 8 日。</span></div>
+      <div class="tb-cell" data-enhancement><span class="tb-k">建筑面积</span><span class="tb-v num">96 平方米</span></div>
     </div>
-    <p class="tb-note">图签为版面示意编排，以上信息均取自原文。</p>
+    <p class="tb-note" data-enhancement>图签为版面示意编排，以上信息均取自原文。</p>
   </header>
 </div>
 
 <div class="layout">
 
-  <nav class="toc" aria-label="目录">
+  <nav class="toc" aria-label="目录" data-enhancement>
     <details id="toc-details" open>
       <summary class="toc-title">目录 · 定位</summary>
       <ol>
@@ -385,13 +418,13 @@
     <h1>社区阅读室：空间与服务设计方案</h1>
 
     <section id="sec-task" aria-labelledby="h-task">
-      <h2 id="h-task"><span class="sec-mark">§</span>设计任务</h2>
+      <h2 id="h-task"><span class="sec-mark" data-enhancement>§</span>设计任务</h2>
       <p>把 96 平方米的闲置活动室改为日常阅读与小型交流兼容的社区阅读室。保留现有窗户和承重结构，不把安静阅读与活动声场混在一起。</p>
-      <p>本次方案只讨论空间组织、服务流程与预算，不替代消防、结构及无障碍专项审核。</p>
+      <p>本次方案只讨论空间组织、服务流程与预算，<span data-notation="underline">不替代消防、结构及无障碍专项审核。</span></p>
     </section>
 
     <section id="sec-needs" aria-labelledby="h-needs">
-      <h2 id="h-needs"><span class="sec-mark">§</span>使用需求</h2>
+      <h2 id="h-needs"><span class="sec-mark" data-enhancement>§</span>使用需求</h2>
       <ul>
         <li>工作日下午以个人阅读与远程工作为主。</li>
         <li>周末举办不超过 12 人的读书交流。</li>
@@ -402,15 +435,15 @@
     </section>
 
     <section id="sec-options" aria-labelledby="h-options">
-      <h2 id="h-options"><span class="sec-mark">§</span>两种方案</h2>
+      <h2 id="h-options"><span class="sec-mark" data-enhancement>§</span>两种方案</h2>
       <div class="table-scroll" tabindex="0" role="region" aria-label="两种方案对照表，可横向滚动">
         <table>
-          <caption>方案 A 与方案 B 在同一六个维度上的对照（“推荐”标注来自原文结论）</caption>
+          <caption data-enhancement>方案 A 与方案 B 在同一六个维度上的对照（“推荐”标注来自原文结论）</caption>
           <thead>
             <tr>
               <th scope="col">维度</th>
               <th scope="col">A：长桌共读</th>
-              <th scope="col">B：分区阅读<span class="rec-badge">推荐</span></th>
+              <th scope="col">B：分区阅读<span class="rec-badge" data-enhancement>推荐</span></th>
             </tr>
           </thead>
           <tbody>
@@ -423,13 +456,13 @@
           </tbody>
         </table>
       </div>
-      <p><strong>推荐 B。</strong>减少 6 个固定阅读位，换取日常安静阅读与周末交流可同时进行。吸声帘不能保证完全隔音，活动时仍需限制音量。</p>
+      <p><strong>推荐 B。</strong>减少 6 个固定阅读位，换取日常安静阅读与周末交流可同时进行。<span data-notation="highlight">吸声帘不能保证完全隔音，活动时仍需限制音量。</span></p>
     </section>
 
     <section id="sec-space" aria-labelledby="h-space">
-      <h2 id="h-space"><span class="sec-mark">§</span>推荐方案的空间分配</h2>
+      <h2 id="h-space"><span class="sec-mark" data-enhancement>§</span>推荐方案的空间分配</h2>
 
-      <figure>
+      <figure data-enhancement>
         <div class="plan-wrap">
           <svg viewBox="0 0 660 460" role="img" aria-labelledby="plan-title plan-desc">
             <title id="plan-title">推荐方案平面分区示意图</title>
@@ -477,7 +510,7 @@
 
       <div class="table-scroll" tabindex="0" role="region" aria-label="空间分配表，可横向滚动">
         <table>
-          <caption>推荐方案（B：分区阅读）的功能面积预算，合计 96 平方米，不新增建筑面积</caption>
+          <caption data-enhancement>推荐方案（B：分区阅读）的功能面积预算，合计 96 平方米，不新增建筑面积</caption>
           <thead>
             <tr><th scope="col">区域</th><th scope="col" class="num">面积（平方米）</th><th scope="col">用途</th></tr>
           </thead>
@@ -496,7 +529,7 @@
     </section>
 
     <section id="sec-flow" aria-labelledby="h-flow">
-      <h2 id="h-flow"><span class="sec-mark">§</span>服务流程</h2>
+      <h2 id="h-flow"><span class="sec-mark" data-enhancement>§</span>服务流程</h2>
       <ol class="steps">
         <li>到达入口，查看座位和活动安排。</li>
         <li>日常阅读直接进入安静区；活动参与者在入口侧交流区签到。</li>
@@ -506,7 +539,7 @@
     </section>
 
     <section id="sec-material" aria-labelledby="h-material">
-      <h2 id="h-material"><span class="sec-mark">§</span>材料与视觉</h2>
+      <h2 id="h-material"><span class="sec-mark" data-enhancement>§</span>材料与视觉</h2>
       <ul>
         <li>墙面：低反光的浅灰白，避免阅读时产生眩光。</li>
         <li>桌面：浅色木纹，易清洁，不采用高光漆。</li>
@@ -517,9 +550,9 @@
     </section>
 
     <section id="sec-budget" aria-labelledby="h-budget">
-      <h2 id="h-budget"><span class="sec-mark">§</span>预算拆分</h2>
+      <h2 id="h-budget"><span class="sec-mark" data-enhancement>§</span>预算拆分</h2>
 
-      <div class="bars" role="group" aria-label="预算拆分条形图：各项目金额与预算上限 90,000 元的比例">
+      <div class="bars" data-enhancement role="group" aria-label="预算拆分条形图：各项目金额与预算上限 90,000 元的比例">
         <div class="bar-row"><span>家具与书架</span><span class="bar-track"><span class="bar-fill" style="width:36.4%"></span></span><span class="bar-value num">32,800 元</span></div>
         <div class="bar-row"><span>照明与电气调整</span><span class="bar-track"><span class="bar-fill" style="width:20.7%"></span></span><span class="bar-value num">18,600 元</span></div>
         <div class="bar-row"><span>吸声与窗帘</span><span class="bar-track"><span class="bar-fill" style="width:16%"></span></span><span class="bar-value num">14,400 元</span></div>
@@ -527,11 +560,11 @@
         <div class="bar-row"><span>预备费</span><span class="bar-track"><span class="bar-fill" style="width:15.8%"></span></span><span class="bar-value num">14,200 元</span></div>
         <div class="bar-row r-total"><span>合计</span><span class="bar-track"><span class="bar-fill f-total" style="width:95.8%"></span><span class="bar-rest" style="left:95.8%;width:4.2%" title="预算上限内剩余 3,800 元"></span></span><span class="bar-value num">86,200 元</span></div>
       </div>
-      <p class="fig-note"><span class="fig-tag">图注</span>条长按“金额 ÷ 预算上限 90,000 元”绘制，每条轨道全长即 90,000 元；合计条尾部的斜线余量为上限内剩余 3,800 元。金额为初步估算，未包含新增结构工程。</p>
+      <p class="fig-note" data-enhancement><span class="fig-tag">图注</span>条长按“金额 ÷ 预算上限 90,000 元”绘制，每条轨道全长即 90,000 元；合计条尾部的斜线余量为上限内剩余 3,800 元。金额为初步估算，未包含新增结构工程。</p>
 
       <div class="table-scroll" tabindex="0" role="region" aria-label="预算拆分表，可横向滚动">
         <table>
-          <caption>预算拆分（初步估算），合计 86,200 元，预算上限 90,000 元</caption>
+          <caption data-enhancement>预算拆分（初步估算），合计 86,200 元，预算上限 90,000 元</caption>
           <thead>
             <tr><th scope="col">项目</th><th scope="col" class="num">金额（元）</th></tr>
           </thead>
@@ -547,21 +580,21 @@
           </tfoot>
         </table>
       </div>
-      <p>金额为初步估算，未包含新增结构工程；实际采购以审核后的清单和报价为准。预算上限为 90,000 元，剩余空间 3,800 元。</p>
+      <p>金额为初步估算，未包含新增结构工程；<span data-notation="underline">实际采购以审核后的清单和报价为准。</span>预算上限为 <span data-notation="circle">90,000 元</span>，剩余空间 3,800 元。</p>
     </section>
 
     <section id="sec-phases" aria-labelledby="h-phases">
-      <h2 id="h-phases"><span class="sec-mark">§</span>实施阶段</h2>
-      <div class="timeline" role="group" aria-label="实施阶段时间线，第 1 周至第 7 周，段长按周数比例 1:2:3:1">
+      <h2 id="h-phases"><span class="sec-mark" data-enhancement>§</span>实施阶段</h2>
+      <div class="timeline" data-enhancement role="group" aria-label="实施阶段时间线，第 1 周至第 7 周，段长按周数比例 1:2:3:1">
         <div class="tl-phase p1"><div class="tl-week num">第 1 周</div><div class="tl-name">现场复核</div><div class="tl-out">尺寸、消防及无障碍问题清单</div></div>
         <div class="tl-phase p2"><div class="tl-week num">第 2–3 周</div><div class="tl-name">深化设计</div><div class="tl-out">布局图、材料表与采购清单</div></div>
         <div class="tl-phase p3"><div class="tl-week num">第 4–6 周</div><div class="tl-name">采购施工</div><div class="tl-out">家具安装、电气与吸声处理</div></div>
         <div class="tl-phase p4"><div class="tl-week num">第 7 周</div><div class="tl-name">试运行</div><div class="tl-out">人流、噪声与维护反馈</div></div>
       </div>
-      <p class="fig-note"><span class="fig-tag">图注</span>时间线段长按阶段周数比例绘制（1 : 2 : 3 : 1，共 7 周）。</p>
+      <p class="fig-note" data-enhancement><span class="fig-tag">图注</span>时间线段长按阶段周数比例绘制（1 : 2 : 3 : 1，共 7 周）。</p>
       <div class="table-scroll" tabindex="0" role="region" aria-label="实施阶段表，可横向滚动">
         <table>
-          <caption>实施阶段与交付物（原文表格）</caption>
+          <caption data-enhancement>实施阶段与交付物（原文表格）</caption>
           <thead>
             <tr><th scope="col">阶段</th><th scope="col">时间</th><th scope="col">交付物</th></tr>
           </thead>
@@ -576,18 +609,18 @@
     </section>
 
     <section id="sec-review" aria-labelledby="h-review">
-      <h2 id="h-review"><span class="sec-mark">§</span>评审与风险</h2>
-      <p class="note-est">以下为评审待核事项（原文均为未完成状态，本页不提供勾选，勾选不代表审核通过）：</p>
+      <h2 id="h-review"><span class="sec-mark" data-enhancement>§</span>评审与风险</h2>
+      <p class="note-est" data-enhancement>以下为评审待核事项（原文均为未完成状态，本页不提供勾选，勾选不代表审核通过）：</p>
       <ul class="review-list">
         <li>消防疏散与无障碍路径经专项审核。</li>
         <li>交流活动不会占用固定阅读位或堵塞通道。</li>
         <li>家具与材料满足维护和阻燃要求。</li>
         <li>预算不超过 90,000 元，新增工程单独报批。</li>
       </ul>
-      <p class="risk"><strong>风险与应对：</strong>若现场审核发现不能形成连续通道，需重新调整布局，不以压缩通道换取更多座位。若活动噪声无法控制，先错开活动时段，再讨论追加隔声工程。</p>
+      <p class="risk"><strong data-enhancement>风险与应对：</strong><span data-notation="underline">若现场审核发现不能形成连续通道，需重新调整布局，不以压缩通道换取更多座位。</span>若活动噪声无法控制，先错开活动时段，再讨论追加隔声工程。</p>
     </section>
 
-    <footer>
+    <footer data-enhancement>
       <p>本页由《社区阅读室：空间与服务设计方案》Markdown 文档转译为单文件阅读页：正文、数字与结论均完整保留自原文；平面分区图、预算条形与阶段时间线为按原文数据生成的示意表达，均已标注口径与“示意”属性；图签为版面示意编排，信息取自原文。</p>
     </footer>
   </main>
@@ -600,9 +633,10 @@
 
   /* 窄屏默认收起目录，宽屏展开 */
   var tocDetails = document.getElementById("toc-details");
-  if (window.matchMedia("(max-width: 900px)").matches) {
-    tocDetails.removeAttribute("open");
-  }
+  var narrow = window.matchMedia("(max-width: 900px)");
+  function syncToc() { tocDetails.open = !narrow.matches; }
+  syncToc();
+  narrow.addEventListener("change", syncToc);
 
   /* 目录当前位置 */
   var tocLinks = Array.prototype.slice.call(document.querySelectorAll(".toc a"));
@@ -630,6 +664,7 @@
   function rowEl(key) { return document.getElementById("row-" + key); }
   function setActive(key, on) {
     var z = zoneEl(key), r = rowEl(key);
+    if (!on && (document.activeElement === z || document.activeElement === r)) { on = true; }
     if (z) { z.classList.toggle("active", on); }
     if (r) { r.classList.toggle("active", on); }
   }
@@ -658,5 +693,89 @@
   });
 })();
 </script>
+<!-- papyra-annotations:start --><!-- Rough Notation 0.5.1; MIT license
+MIT License
+
+Copyright (c) 2020 Preet Shihn
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+-->
+<script data-enhancement="notation">var RoughNotation=function(t){"use strict";const e="http://www.w3.org/2000/svg";class s{constructor(t){this.seed=t}next(){return this.seed?(2**31-1&(this.seed=Math.imul(48271,this.seed)))/2**31:Math.random()}}function i(t,e,s,i,n){return{type:"path",ops:u(t,e,s,i,n)}}function n(t,e,s){const n=(t||[]).length;if(n>2){const i=[];for(let e=0;e<n-1;e++)i.push(...u(t[e][0],t[e][1],t[e+1][0],t[e+1][1],s));return e&&i.push(...u(t[n-1][0],t[n-1][1],t[0][0],t[0][1],s)),{type:"path",ops:i}}return 2===n?i(t[0][0],t[0][1],t[1][0],t[1][1],s):{type:"path",ops:[]}}function o(t,e,s,i,o){return function(t,e){return n(t,!0,e)}([[t,e],[t+s,e],[t+s,e+i],[t,e+i]],o)}function r(t,e,s,i,n){return function(t,e,s,i){const[n,o]=g(i.increment,t,e,i.rx,i.ry,1,i.increment*a(.1,a(.4,1,s),s),s);let r=l(n,null,s);if(!s.disableMultiStroke){const[n]=g(i.increment,t,e,i.rx,i.ry,1.5,0,s),o=l(n,null,s);r=r.concat(o)}return{estimatedPoints:o,opset:{type:"path",ops:r}}}(t,e,n,function(t,e,s){const i=Math.sqrt(2*Math.PI*Math.sqrt((Math.pow(t/2,2)+Math.pow(e/2,2))/2)),n=Math.max(s.curveStepCount,s.curveStepCount/Math.sqrt(200)*i),o=2*Math.PI/n;let r=Math.abs(t/2),h=Math.abs(e/2);const a=1-s.curveFitting;return r+=c(r*a,s),h+=c(h*a,s),{increment:o,rx:r,ry:h}}(s,i,n)).opset}function h(t){return t.randomizer||(t.randomizer=new s(t.seed||0)),t.randomizer.next()}function a(t,e,s,i=1){return s.roughness*i*(h(s)*(e-t)+t)}function c(t,e,s=1){return a(-t,t,e,s)}function u(t,e,s,i,n,o=!1){const r=o?n.disableMultiStrokeFill:n.disableMultiStroke,h=f(t,e,s,i,n,!0,!1);if(r)return h;const a=f(t,e,s,i,n,!0,!0);return h.concat(a)}function f(t,e,s,i,n,o,r){const a=Math.pow(t-s,2)+Math.pow(e-i,2),u=Math.sqrt(a);let f=1;f=u<200?1:u>500?.4:-.0016668*u+1.233334;let l=n.maxRandomnessOffset||0;l*l*100>a&&(l=u/10);const g=l/2,d=.2+.2*h(n);let p=n.bowing*n.maxRandomnessOffset*(i-e)/200,_=n.bowing*n.maxRandomnessOffset*(t-s)/200;p=c(p,n,f),_=c(_,n,f);const m=[],w=()=>c(g,n,f),v=()=>c(l,n,f);return o&&(r?m.push({op:"move",data:[t+w(),e+w()]}):m.push({op:"move",data:[t+c(l,n,f),e+c(l,n,f)]})),r?m.push({op:"bcurveTo",data:[p+t+(s-t)*d+w(),_+e+(i-e)*d+w(),p+t+2*(s-t)*d+w(),_+e+2*(i-e)*d+w(),s+w(),i+w()]}):m.push({op:"bcurveTo",data:[p+t+(s-t)*d+v(),_+e+(i-e)*d+v(),p+t+2*(s-t)*d+v(),_+e+2*(i-e)*d+v(),s+v(),i+v()]}),m}function l(t,e,s){const i=t.length,n=[];if(i>3){const o=[],r=1-s.curveTightness;n.push({op:"move",data:[t[1][0],t[1][1]]});for(let e=1;e+2<i;e++){const s=t[e];o[0]=[s[0],s[1]],o[1]=[s[0]+(r*t[e+1][0]-r*t[e-1][0])/6,s[1]+(r*t[e+1][1]-r*t[e-1][1])/6],o[2]=[t[e+1][0]+(r*t[e][0]-r*t[e+2][0])/6,t[e+1][1]+(r*t[e][1]-r*t[e+2][1])/6],o[3]=[t[e+1][0],t[e+1][1]],n.push({op:"bcurveTo",data:[o[1][0],o[1][1],o[2][0],o[2][1],o[3][0],o[3][1]]})}if(e&&2===e.length){const t=s.maxRandomnessOffset;n.push({op:"lineTo",data:[e[0]+c(t,s),e[1]+c(t,s)]})}}else 3===i?(n.push({op:"move",data:[t[1][0],t[1][1]]}),n.push({op:"bcurveTo",data:[t[1][0],t[1][1],t[2][0],t[2][1],t[2][0],t[2][1]]})):2===i&&n.push(...u(t[0][0],t[0][1],t[1][0],t[1][1],s));return n}function g(t,e,s,i,n,o,r,h){const a=[],u=[],f=c(.5,h)-Math.PI/2;u.push([c(o,h)+e+.9*i*Math.cos(f-t),c(o,h)+s+.9*n*Math.sin(f-t)]);for(let r=f;r<2*Math.PI+f-.01;r+=t){const t=[c(o,h)+e+i*Math.cos(r),c(o,h)+s+n*Math.sin(r)];a.push(t),u.push(t)}return u.push([c(o,h)+e+i*Math.cos(f+2*Math.PI+.5*r),c(o,h)+s+n*Math.sin(f+2*Math.PI+.5*r)]),u.push([c(o,h)+e+.98*i*Math.cos(f+r),c(o,h)+s+.98*n*Math.sin(f+r)]),u.push([c(o,h)+e+.9*i*Math.cos(f+.5*r),c(o,h)+s+.9*n*Math.sin(f+.5*r)]),[u,a]}function d(t,e){return{maxRandomnessOffset:2,roughness:"highlight"===t?3:1.5,bowing:1,stroke:"#000",strokeWidth:1.5,curveTightness:0,curveFitting:.95,curveStepCount:9,fillStyle:"hachure",fillWeight:-1,hachureAngle:-41,hachureGap:-1,dashOffset:-1,dashGap:-1,zigzagOffset:-1,combineNestedSvgPaths:!1,disableMultiStroke:"double"!==t,disableMultiStrokeFill:!1,seed:e}}function p(t,s,h,a,c,u){const f=[];let l=h.strokeWidth||2;const g=function(t){const e=t.padding;if(e||0===e){if("number"==typeof e)return[e,e,e,e];if(Array.isArray(e)){const t=e;if(t.length)switch(t.length){case 4:return[...t];case 1:return[t[0],t[0],t[0],t[0]];case 2:return[...t,...t];case 3:return[...t,t[1]];default:return[t[0],t[1],t[2],t[3]]}}}return[5,5,5,5]}(h),p=void 0===h.animate||!!h.animate,_=h.iterations||2,m=h.rtl?1:0,w=d("single",u);switch(h.type){case"underline":{const t=s.y+s.h+g[2];for(let e=m;e<_+m;e++)e%2?f.push(i(s.x+s.w,t,s.x,t,w)):f.push(i(s.x,t,s.x+s.w,t,w));break}case"strike-through":{const t=s.y+s.h/2;for(let e=m;e<_+m;e++)e%2?f.push(i(s.x+s.w,t,s.x,t,w)):f.push(i(s.x,t,s.x+s.w,t,w));break}case"box":{const t=s.x-g[3],e=s.y-g[0],i=s.w+(g[1]+g[3]),n=s.h+(g[0]+g[2]);for(let s=0;s<_;s++)f.push(o(t,e,i,n,w));break}case"bracket":{const t=Array.isArray(h.brackets)?h.brackets:h.brackets?[h.brackets]:["right"],e=s.x-2*g[3],i=s.x+s.w+2*g[1],o=s.y-2*g[0],r=s.y+s.h+2*g[2];for(const h of t){let t;switch(h){case"bottom":t=[[e,s.y+s.h],[e,r],[i,r],[i,s.y+s.h]];break;case"top":t=[[e,s.y],[e,o],[i,o],[i,s.y]];break;case"left":t=[[s.x,o],[e,o],[e,r],[s.x,r]];break;case"right":t=[[s.x+s.w,o],[i,o],[i,r],[s.x+s.w,r]]}t&&f.push(n(t,!1,w))}break}case"crossed-off":{const t=s.x,e=s.y,n=t+s.w,o=e+s.h;for(let s=m;s<_+m;s++)s%2?f.push(i(n,o,t,e,w)):f.push(i(t,e,n,o,w));for(let s=m;s<_+m;s++)s%2?f.push(i(t,o,n,e,w)):f.push(i(n,e,t,o,w));break}case"circle":{const t=d("double",u),e=s.w+(g[1]+g[3]),i=s.h+(g[0]+g[2]),n=s.x-g[3]+e/2,o=s.y-g[0]+i/2,h=Math.floor(_/2),a=_-2*h;for(let s=0;s<h;s++)f.push(r(n,o,e,i,t));for(let t=0;t<a;t++)f.push(r(n,o,e,i,w));break}case"highlight":{const t=d("highlight",u);l=.95*s.h;const e=s.y+s.h/2;for(let n=m;n<_+m;n++)n%2?f.push(i(s.x+s.w,e,s.x,e,t)):f.push(i(s.x,e,s.x+s.w,e,t));break}}if(f.length){const s=function(t){const e=[];for(const s of t){let t="";for(const i of s.ops){const s=i.data;switch(i.op){case"move":t.trim()&&e.push(t.trim()),t=`M${s[0]} ${s[1]} `;break;case"bcurveTo":t+=`C${s[0]} ${s[1]}, ${s[2]} ${s[3]}, ${s[4]} ${s[5]} `;break;case"lineTo":t+=`L${s[0]} ${s[1]} `}}t.trim()&&e.push(t.trim())}return e}(f),i=[],n=[];let o=0;const r=(t,e,s)=>t.setAttribute(e,s);for(const a of s){const s=document.createElementNS(e,"path");if(r(s,"d",a),r(s,"fill","none"),r(s,"stroke",h.color||"currentColor"),r(s,"stroke-width",""+l),p){const t=s.getTotalLength();i.push(t),o+=t}t.appendChild(s),n.push(s)}if(p){let t=0;for(let e=0;e<n.length;e++){const s=n[e],r=i[e],h=o?c*(r/o):0,u=a+t,f=s.style;f.strokeDashoffset=""+r,f.strokeDasharray=""+r,f.animation=`rough-notation-dash ${h}ms ease-out ${u}ms forwards`,t+=h}}}}class _{constructor(t,e){this._state="unattached",this._resizing=!1,this._seed=Math.floor(Math.random()*2**31),this._lastSizes=[],this._animationDelay=0,this._resizeListener=()=>{this._resizing||(this._resizing=!0,setTimeout(()=>{this._resizing=!1,"showing"===this._state&&this.haveRectsChanged()&&this.show()},400))},this._e=t,this._config=JSON.parse(JSON.stringify(e)),this.attach()}get animate(){return this._config.animate}set animate(t){this._config.animate=t}get animationDuration(){return this._config.animationDuration}set animationDuration(t){this._config.animationDuration=t}get iterations(){return this._config.iterations}set iterations(t){this._config.iterations=t}get color(){return this._config.color}set color(t){this._config.color!==t&&(this._config.color=t,this.refresh())}get strokeWidth(){return this._config.strokeWidth}set strokeWidth(t){this._config.strokeWidth!==t&&(this._config.strokeWidth=t,this.refresh())}get padding(){return this._config.padding}set padding(t){this._config.padding!==t&&(this._config.padding=t,this.refresh())}attach(){if("unattached"===this._state&&this._e.parentElement){!function(){if(!window.__rno_kf_s){const t=window.__rno_kf_s=document.createElement("style");t.textContent="@keyframes rough-notation-dash { to { stroke-dashoffset: 0; } }",document.head.appendChild(t)}}();const t=this._svg=document.createElementNS(e,"svg");t.setAttribute("class","rough-annotation");const s=t.style;s.position="absolute",s.top="0",s.left="0",s.overflow="visible",s.pointerEvents="none",s.width="100px",s.height="100px";const i="highlight"===this._config.type;if(this._e.insertAdjacentElement(i?"beforebegin":"afterend",t),this._state="not-showing",i){const t=window.getComputedStyle(this._e).position;(!t||"static"===t)&&(this._e.style.position="relative")}this.attachListeners()}}detachListeners(){window.removeEventListener("resize",this._resizeListener),this._ro&&this._ro.unobserve(this._e)}attachListeners(){this.detachListeners(),window.addEventListener("resize",this._resizeListener,{passive:!0}),!this._ro&&"ResizeObserver"in window&&(this._ro=new window.ResizeObserver(t=>{for(const e of t)e.contentRect&&this._resizeListener()})),this._ro&&this._ro.observe(this._e)}haveRectsChanged(){if(this._lastSizes.length){const t=this.rects();if(t.length!==this._lastSizes.length)return!0;for(let e=0;e<t.length;e++)if(!this.isSameRect(t[e],this._lastSizes[e]))return!0}return!1}isSameRect(t,e){const s=(t,e)=>Math.round(t)===Math.round(e);return s(t.x,e.x)&&s(t.y,e.y)&&s(t.w,e.w)&&s(t.h,e.h)}isShowing(){return"not-showing"!==this._state}refresh(){this.isShowing()&&!this.pendingRefresh&&(this.pendingRefresh=Promise.resolve().then(()=>{this.isShowing()&&this.show(),delete this.pendingRefresh}))}show(){switch(this._state){case"unattached":break;case"showing":this.hide(),this._svg&&this.render(this._svg,!0);break;case"not-showing":this.attach(),this._svg&&this.render(this._svg,!1)}}hide(){if(this._svg)for(;this._svg.lastChild;)this._svg.removeChild(this._svg.lastChild);this._state="not-showing"}remove(){this._svg&&this._svg.parentElement&&this._svg.parentElement.removeChild(this._svg),this._svg=void 0,this._state="unattached",this.detachListeners()}render(t,e){let s=this._config;e&&(s=JSON.parse(JSON.stringify(this._config)),s.animate=!1);const i=this.rects();let n=0;i.forEach(t=>n+=t.w);const o=s.animationDuration||800;let r=0;for(let e=0;e<i.length;e++){const h=o*(i[e].w/n);p(t,i[e],s,r+this._animationDelay,h,this._seed),r+=h}this._lastSizes=i,this._state="showing"}rects(){const t=[];if(this._svg)if(this._config.multiline){const e=this._e.getClientRects();for(let s=0;s<e.length;s++)t.push(this.svgRect(this._svg,e[s]))}else t.push(this.svgRect(this._svg,this._e.getBoundingClientRect()));return t}svgRect(t,e){const s=t.getBoundingClientRect(),i=e;return{x:(i.x||i.left)-(s.x||s.left),y:(i.y||i.top)-(s.y||s.top),w:i.width,h:i.height}}}return t.annotate=function(t,e){return new _(t,e)},t.annotationGroup=function(t){let e=0;for(const s of t){const t=s;t._animationDelay=e;e+=0===t.animationDuration?0:t.animationDuration||800}const s=[...t];return{show(){for(const t of s)t.show()},hide(){for(const t of s)t.hide()}}},Object.defineProperty(t,"__esModule",{value:!0}),t}({});
+</script>
+<script data-enhancement="notation">(() => {
+  const entries = [];
+  let frame;
+  function draw() {
+    for (const entry of entries) {
+      const { element } = entry;
+      if (!element.getClientRects().length || !element.getBoundingClientRect().width) continue;
+      try {
+        const requested = element.dataset.notation;
+        const type = requested === 'circle' && element.getClientRects().length > 1
+          ? 'underline' : requested;
+        const computed = getComputedStyle(element);
+        const color = type === 'highlight'
+          ? computed.getPropertyValue('--notation-highlight').trim() || 'rgba(127,127,127,.2)'
+          : computed.getPropertyValue('--notation-color').trim();
+        const stroke = !color || color === 'currentColor' ? computed.color : color;
+        if (entry.type !== type) {
+          entry.annotation?.remove();
+          entry.annotation = RoughNotation.annotate(element, {
+            type, animate: false, multiline: true, iterations: 1,
+            color: stroke,
+            padding: type === 'circle' ? 3 : 1, strokeWidth: 1.5
+          });
+          entry.svg = type === 'highlight' ? element.previousElementSibling : element.nextElementSibling;
+          entry.svg.dataset.enhancement = 'notation';
+          entry.svg.setAttribute('aria-hidden', 'true');
+          entry.type = type;
+        }
+        entry.annotation.color = stroke;
+        entry.annotation.show();
+        element.classList.add('notation-ready');
+      } catch (error) {
+        entry.annotation?.remove();
+        entry.type = undefined;
+        element.classList.remove('notation-ready');
+        console.error('Notation failed:', error);
+      }
+    }
+  }
+  function refresh() {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(draw);
+  }
+  async function start() {
+    await document.fonts.ready;
+    document.querySelectorAll('[data-notation]').forEach(element => {
+      if (['underline', 'highlight', 'circle'].includes(element.dataset.notation)) entries.push({ element });
+    });
+    refresh();
+    // The library observes size changes; these events also cover position-only changes.
+    document.addEventListener('load', refresh, true);
+    document.addEventListener('toggle', refresh, true);
+    document.addEventListener('papyra:refresh-annotations', refresh);
+    window.addEventListener('resize', refresh, { passive: true });
+  }
+  start().catch(error => console.error('Notation initialization failed:', error));
+})();
+</script>
+<!-- papyra-annotations:end -->
 </body>
 </html>

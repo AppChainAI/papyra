@@ -1,5 +1,18 @@
 # Third-party notices
 
+## Rough Notation
+
+`assets/rough-notation-0.5.1.iife.js` is the unmodified, self-contained upstream browser distribution. Papyra's `annotations.js` and `annotations.css` integrate it into offline reading pages.
+
+- Source: https://github.com/rough-stuff/rough-notation
+- Version: 0.5.1
+- Distribution: https://unpkg.com/rough-notation@0.5.1/lib/rough-notation.iife.js
+- SHA256: `f90aa0090e361ff48694b74e0319e109856decb3e757c280dfe25e3607f35fac`
+- Copyright 2020 Preet Shihn
+- License: MIT; full text: [licenses/rough-notation-MIT.txt](licenses/rough-notation-MIT.txt).
+
+When embedding the library in a generated HTML file, include this copyright and full license text in that file too.
+
 ## Impeccable
 
 `references/visual-design.md` and `references/acceptance.md` contain material adapted from Impeccable's reading-mode, typography, layout, polish, and bounded-verification guidance. Papyra changes the guidance for Chinese document reading, system fonts, offline single-file output, and source-content fidelity; it does not bundle Impeccable's engine or launcher.

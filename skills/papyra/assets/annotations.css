@@ -1,0 +1,29 @@
+:root {
+  --notation-color: currentColor;
+  --notation-highlight: rgba(127, 127, 127, .2);
+  --notation-highlight-ink: inherit;
+}
+[data-notation] {
+  text-decoration: underline;
+  text-decoration-color: var(--notation-color);
+  text-underline-offset: .18em;
+}
+[data-notation="highlight"] {
+  color: var(--notation-highlight-ink);
+  background: var(--notation-highlight);
+  text-decoration: none;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+@media screen {
+  [data-notation].notation-ready { text-decoration: none; background: transparent; }
+}
+@media print {
+  .rough-annotation { display: none !important; }
+  [data-notation] { text-decoration-color: currentColor; }
+  [data-notation="highlight"] {
+    color: inherit;
+    background: transparent;
+    text-decoration: underline;
+  }
+}
