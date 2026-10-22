@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 320" role="img" aria-labelledby="title desc">
+  <title id="title">三、四、五直角三角形</title>
+  <desc id="desc">两条直角边长度分别为三和四，斜边长度为五；图形按相同尺度绘制。</desc>
+  <defs><marker id="arrow" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto"><path d="M0 0L6 3L0 6" fill="currentColor"/></marker></defs>
+  <path d="M60 260H360L60 35Z" fill="none" stroke="currentColor" stroke-width="3"/>
+  <path d="M60 240H80V260" fill="none" stroke="currentColor" stroke-width="2"/>
+  <g fill="currentColor" font-family="serif" font-size="22"><text x="200" y="292">4</text><text x="28" y="155">3</text><text x="230" y="135">5</text></g>
+  <path d="M120 300H300" stroke="currentColor" stroke-width="1.5" marker-end="url(#arrow)"/>
+</svg>

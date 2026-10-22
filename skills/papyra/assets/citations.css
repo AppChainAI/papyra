@@ -1,0 +1,98 @@
+/* Native citation navigation; embed this file verbatim in the generated HTML. */
+.papyra-citations {
+  --citation-link: #4c237c;
+  --citation-focus: #542b8c;
+  --citation-target: #eee5ff;
+  --citation-rule: #b8a4d5;
+}
+.papyra-citations a {
+  color: var(--citation-link);
+  text-decoration-thickness: .08em;
+  text-underline-offset: .18em;
+  overflow-wrap: anywhere;
+}
+.papyra-citations a:hover { text-decoration-thickness: .15em; }
+.papyra-citations a:focus-visible,
+.papyra-citations [tabindex="-1"]:focus-visible {
+  outline: 3px solid var(--citation-focus);
+  outline-offset: 4px;
+}
+.papyra-citations .citation-ref {
+  display: inline-block;
+  min-inline-size: 1.75em;
+  padding: .08em .15em;
+  text-align: center;
+  font: 700 .85em/1.65 system-ui, sans-serif;
+  vertical-align: baseline;
+}
+.papyra-citations .citation-call {
+  position: relative;
+  top: -.3em;
+  font-size: .9em;
+  line-height: 0;
+  vertical-align: baseline;
+}
+.papyra-citations .citation-note,
+.papyra-citations .citation-ref {
+  scroll-margin-block: 2rem;
+}
+.papyra-citations .citation-note:target,
+.papyra-citations .citation-ref:target {
+  background: var(--citation-target);
+  outline: 2px solid var(--citation-focus);
+  outline-offset: 4px;
+}
+.papyra-citations .citation-notes {
+  padding-inline-start: 1.8rem;
+}
+.papyra-citations .citation-note {
+  margin-block: 1.8rem;
+  padding-inline-start: .75rem;
+  border-inline-start: 3px solid var(--citation-rule);
+  overflow-wrap: anywhere;
+}
+.papyra-citations .citation-note::marker {
+  font-weight: 700;
+}
+.papyra-citations .citation-note p { margin-block: .65em; }
+.papyra-citations .citation-backlinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem 1rem;
+  font: .9rem/1.6 system-ui, sans-serif;
+}
+.papyra-citations .citation-backlinks a { padding-block: .3rem; }
+.papyra-citations .citation-url {
+  font-size: .94em;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.papyra-citations [data-evidence-origin="agent-supplemental"] {
+  border-inline-start: 4px double var(--citation-focus);
+  padding-inline-start: 1rem;
+}
+@media print {
+  .papyra-citations {
+    --citation-link: #000;
+    --citation-focus: #000;
+    --citation-target: transparent;
+    --citation-rule: #777;
+  }
+  .papyra-citations a { color: #000; }
+  .papyra-citations .citation-note {
+    overflow: visible;
+    max-block-size: none;
+    break-inside: auto;
+  }
+  .papyra-citations .citation-ref:target,
+  .papyra-citations .citation-note:target { outline: none; }
+  /* URL-only anchors already print their full original URL as their text. */
+  .papyra-citations a[href^="https://"]:not(.citation-url)::after,
+  .papyra-citations a[href^="http://"]:not(.citation-url)::after {
+    content: " (" attr(href) ")";
+    overflow-wrap: anywhere;
+    font-size: .9em;
+  }
+  .papyra-citations .citation-url { white-space: normal; }
+  .papyra-citations .citation-backlinks { font-size: 9pt; }
+}

@@ -1,0 +1,71 @@
+/* Papyra math presentation. Embed after the bundled Temml Local stylesheet. */
+.math-visual {
+  display: inline-flex;
+  align-items: baseline;
+  vertical-align: baseline;
+  max-width: 100%;
+  color: inherit;
+}
+.math-typeset {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: .15em;
+}
+.math-block {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  margin-block: 1.1rem .4rem;
+  scroll-margin-block-start: 2rem;
+}
+.math-block > .math-typeset {
+  flex: 1;
+  padding-block: .6rem;
+}
+.math-number {
+  flex: none;
+  font: inherit;
+  font-variant-numeric: tabular-nums;
+}
+.math-source {
+  margin-block: .35rem 1rem;
+  font-size: .9em;
+}
+.math-source > summary {
+  width: fit-content;
+  cursor: pointer;
+  color: var(--math-source-color, inherit);
+  text-underline-offset: .2em;
+}
+.math-source > summary:hover { text-decoration: underline; }
+.math-source > summary:focus-visible,
+.math-visual a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+.math-source pre {
+  max-width: 100%;
+  overflow-x: auto;
+  padding: .8rem 1rem;
+  background: var(--math-source-background, #f1f5f9);
+  color: var(--math-source-ink, #172033);
+  border-inline-start: 3px solid currentColor;
+  white-space: pre;
+  tab-size: 2;
+}
+.math-source code { font: .92em/1.6 ui-monospace, SFMono-Regular, Consolas, monospace; }
+.math-error {
+  display: block;
+  padding: .75rem 1rem;
+  border: 1px solid currentColor;
+  color: var(--math-error-color, #9b2424);
+  overflow-wrap: anywhere;
+}
+@media print {
+  .math-block { break-inside: avoid; }
+  .math-source pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+  .math-typeset { overflow: visible; }
+}
