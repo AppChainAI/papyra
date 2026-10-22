@@ -19,7 +19,7 @@
           entry.annotation = RoughNotation.annotate(element, {
             type, animate: false, multiline: true, iterations: 1,
             color: stroke,
-            padding: type === 'circle' ? 3 : 1, strokeWidth: 1.5
+            padding: type === 'circle' ? 3 : 1, strokeWidth: type === 'circle' ? 2.5 : 3
           });
           entry.svg = type === 'highlight' ? element.previousElementSibling : element.nextElementSibling;
           entry.svg.dataset.enhancement = 'notation';

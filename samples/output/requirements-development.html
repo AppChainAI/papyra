@@ -398,6 +398,7 @@
 [data-notation] {
   text-decoration: underline;
   text-decoration-color: var(--notation-color);
+  text-decoration-thickness: 3px;
   text-underline-offset: .18em;
 }
 [data-notation="highlight"] {
@@ -476,7 +477,7 @@
 
       <section id="sec-story">
         <h2>用户故事</h2>
-        <p>作为项目负责人，我希望把需求文档导出为一个 HTML 文件，发给没有开发环境的同事；对方断网后仍能阅读正文、图片与代码。</p>
+        <p>作为项目负责人，我希望把需求文档导出为一个 HTML 文件，发给没有开发环境的同事；<span data-notation="underline">对方断网后仍能阅读正文、图片与代码。</span></p>
       </section>
 
       <section id="sec-scope">
@@ -484,15 +485,15 @@
         <h3>本期包含</h3>
         <ul>
           <li>Markdown 文件与同目录中的关联图片。</li>
-          <li>单个 HTML 输出，内嵌样式、脚本和必要图片。</li>
+          <li><span data-notation="underline">单个 HTML 输出，内嵌样式、脚本和必要图片。</span></li>
           <li>任务状态查询、失败原因展示和手动重试。</li>
-          <li>同名文件冲突确认与临时文件原子替换。</li>
+          <li><span data-notation="underline">同名文件冲突确认与临时文件原子替换。</span></li>
         </ul>
         <h3>本期不包含</h3>
         <ul>
           <li>PDF、扫描件 OCR 与批量导出。</li>
           <li>多用户协同、在线发布与远程图片下载。</li>
-          <li>自动修改原文、翻译正文或事实补全。</li>
+          <li><span data-notation="highlight">自动修改原文、翻译正文或事实补全。</span></li>
         </ul>
       </section>
 
@@ -572,7 +573,7 @@
 
       <section id="sec-api">
         <h2>接口草案</h2>
-        <p>以下接口用于评审，不是当前可用 API。</p>
+        <p><span data-notation="highlight">以下接口用于评审，不是当前可用 API。</span></p>
 
         <figure class="code">
           <button type="button" class="copy-btn" data-enhancement data-copy>复制</button>
@@ -613,9 +614,9 @@ Content-Type: application/json
         <h2>验收清单</h2>
         <ul class="checklist">
           <li><input type="checkbox" disabled id="c1"><label for="c1">断网打开 HTML，正文、图片和必要交互正常。</label></li>
-          <li><input type="checkbox" disabled id="c2"><label for="c2">标题、段落、表格、代码与链接没有静默遗漏。</label></li>
+          <li><input type="checkbox" disabled id="c2"><label for="c2"><span data-notation="underline">标题、段落、表格、代码与链接没有静默遗漏。</span></label></li>
           <li><input type="checkbox" disabled id="c3"><label for="c3">源文件及图片的内容哈希不变。</label></li>
-          <li><input type="checkbox" disabled id="c4"><label for="c4">未确认覆盖时，原有输出文件保持不变。</label></li>
+          <li><input type="checkbox" disabled id="c4"><label for="c4"><span data-notation="underline">未确认覆盖时，原有输出文件保持不变。</span></label></li>
           <li><input type="checkbox" disabled id="c5"><label for="c5">agent 失败后清理临时文件，保留已有有效产物。</label></li>
           <li><input type="checkbox" disabled id="c6"><label for="c6">取消任务不会留下冒充成功的半成品。</label></li>
           <li><input type="checkbox" disabled id="c7"><label for="c7">路径穿越与符号链接逃逸被拒绝。</label></li>
@@ -650,7 +651,7 @@ Content-Type: application/json
       <section id="sec-open">
         <h2>未决事项</h2>
         <ol>
-          <li>最大文档长度与单张图片大小需要用真实样本测量后确定。</li>
+          <li><span data-notation="underline">最大文档长度与单张图片大小需要用真实样本测量后确定。</span></li>
           <li>agent 超时时间及中断方式由首次集成结果决定。</li>
           <li>接口错误码属于草案，客户端与服务端需在实现前共同确认。</li>
         </ol>
@@ -807,7 +808,7 @@ SOFTWARE.
           entry.annotation = RoughNotation.annotate(element, {
             type, animate: false, multiline: true, iterations: 1,
             color: stroke,
-            padding: type === 'circle' ? 3 : 1, strokeWidth: 1.5
+            padding: type === 'circle' ? 3 : 1, strokeWidth: type === 'circle' ? 2.5 : 3
           });
           entry.svg = type === 'highlight' ? element.previousElementSibling : element.nextElementSibling;
           entry.svg.dataset.enhancement = 'notation';

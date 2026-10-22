@@ -363,6 +363,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 [data-notation] {
   text-decoration: underline;
   text-decoration-color: var(--notation-color);
+  text-decoration-thickness: 3px;
   text-underline-offset: .18em;
 }
 [data-notation="highlight"] {
@@ -419,7 +420,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   <!-- ============ 一版 · 本周结论 ============ -->
   <section id="sec-conclusion" aria-labelledby="h-conclusion">
     <h2 id="h-conclusion">本周结论</h2>
-    <p>工作坊报名已达到 184 人，距离 240 人目标还差 56 人。邮件渠道的报名转化率最高；付费投放贡献了最多访问，但单次报名成本已超过 160 元警戒线。<span data-notation="underline">下一周优先修复移动端报名流程，再调整投放预算，不以访问量替代有效报名。</span></p>
+    <p>工作坊报名已达到 184 人，<span data-notation="highlight">距离 240 人目标还差 56 人</span>。邮件渠道的报名转化率最高；付费投放贡献了最多访问，但单次报名成本已超过 160 元警戒线。<span data-notation="underline">下一周优先修复移动端报名流程，再调整投放预算，不以访问量替代有效报名。</span></p>
 
     <figure data-enhancement class="headline-figure">
       <span class="enh-tag">示意 · 数据出自本节与「目标与口径」</span>
@@ -441,8 +442,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   <section id="sec-metrics" aria-labelledby="h-metrics">
     <h2 id="h-metrics">目标与口径</h2>
     <ul>
-      <li>主目标：10 月 16 日前获得 240 个有效报名，至少 150 人实际到场。</li>
-      <li>有效报名：填写完整联系方式并确认参会意向；重复邮箱只计一次。</li>
+      <li>主目标：<span data-notation="underline">10 月 16 日前获得 240 个有效报名，至少 150 人实际到场</span>。</li>
+      <li>有效报名：<span data-notation="underline">填写完整联系方式并确认参会意向；重复邮箱只计一次</span>。</li>
       <li>转化率：有效报名数 ÷ 去重落地页访问数。</li>
       <li>单次报名成本：该渠道费用 ÷ 该渠道有效报名数。</li>
       <li><span data-notation="underline">到场率尚未产生，不得把确认参会人数当成实际到场人数。</span></li>
@@ -472,7 +473,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
         </tbody>
       </table>
     </div>
-    <p>渠道访问合计按渠道去重，不代表跨渠道的唯一访客总数。报名采用单一来源归因，合计不存在重复报名。</p>
+    <p><span data-notation="underline">渠道访问合计按渠道去重，不代表跨渠道的唯一访客总数。</span>报名采用单一来源归因，合计不存在重复报名。</p>
 
     <figure data-enhancement class="gauge">
       <span class="enh-tag">示意 · 刻度依据上表「单次报名成本」列与「风险与停止条件」第 1 条</span>
@@ -552,7 +553,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
     </div>
     <p>执行前检查：</p>
     <ul class="checklist">
-      <li><span class="box" aria-hidden="true"></span>确认移动端修复已上线。</li>
+      <li><span class="box" aria-hidden="true"></span><span data-notation="underline">确认移动端修复已上线。</span></li>
       <li><span class="box" aria-hidden="true"></span>校验邮件退订入口和授权名单。</li>
       <li><span class="box" aria-hidden="true"></span>检查报名表与归因参数。</li>
       <li><span class="box" aria-hidden="true"></span>准备取消活动时的退款说明。</li>
@@ -594,7 +595,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   <section id="sec-risks" aria-labelledby="h-risks">
     <h2 id="h-risks">风险与停止条件</h2>
     <ol>
-      <li>若付费渠道连续两天单次报名成本超过 160 元，暂停该组素材并复核归因。</li>
+      <li><span data-notation="underline">若付费渠道连续两天单次报名成本超过 160 元，暂停该组素材并复核归因。</span></li>
       <li><span data-notation="underline">若报名表出现数据丢失，立即停止投放，修复后才恢复。</span></li>
       <li>活动名单只用于本次通知，不转交其他渠道，不展示个人联系方式。</li>
     </ol>
@@ -608,7 +609,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   <section id="sec-review" aria-labelledby="h-review">
     <h2 id="h-review">评审问题</h2>
     <ul>
-      <li>是否批准将付费预算从 8,640 元降至 4,800 元？</li>
+      <li>是否批准将<span data-notation="highlight">付费预算从 8,640 元降至 4,800 元</span>？</li>
       <li>是否由产品团队优先处理移动端报名障碍？</li>
       <li>是否在 10 月 5 日复核渠道结构与有效报名质量？</li>
     </ul>
@@ -699,7 +700,7 @@ SOFTWARE.
           entry.annotation = RoughNotation.annotate(element, {
             type, animate: false, multiline: true, iterations: 1,
             color: stroke,
-            padding: type === 'circle' ? 3 : 1, strokeWidth: 1.5
+            padding: type === 'circle' ? 3 : 1, strokeWidth: type === 'circle' ? 2.5 : 3
           });
           entry.svg = type === 'highlight' ? element.previousElementSibling : element.nextElementSibling;
           entry.svg.dataset.enhancement = 'notation';

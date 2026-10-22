@@ -356,6 +356,7 @@
 [data-notation] {
   text-decoration: underline;
   text-decoration-color: var(--notation-color);
+  text-decoration-thickness: 3px;
   text-underline-offset: .18em;
 }
 [data-notation="highlight"] {
@@ -419,7 +420,7 @@
 
     <section id="sec-task" aria-labelledby="h-task">
       <h2 id="h-task"><span class="sec-mark" data-enhancement>§</span>设计任务</h2>
-      <p>把 96 平方米的闲置活动室改为日常阅读与小型交流兼容的社区阅读室。保留现有窗户和承重结构，不把安静阅读与活动声场混在一起。</p>
+      <p>把 96 平方米的闲置活动室改为日常阅读与小型交流兼容的社区阅读室。<span data-notation="underline">保留现有窗户和承重结构，不把安静阅读与活动声场混在一起。</span></p>
       <p>本次方案只讨论空间组织、服务流程与预算，<span data-notation="underline">不替代消防、结构及无障碍专项审核。</span></p>
     </section>
 
@@ -427,10 +428,10 @@
       <h2 id="h-needs"><span class="sec-mark" data-enhancement>§</span>使用需求</h2>
       <ul>
         <li>工作日下午以个人阅读与远程工作为主。</li>
-        <li>周末举办不超过 12 人的读书交流。</li>
+        <li>周末举办<span data-notation="highlight">不超过 12 人</span>的读书交流。</li>
         <li>入口处可归还图书，工作人员能看清借还区域。</li>
         <li>阅读位应避免屏幕正对窗户反光。</li>
-        <li>通道连续，无障碍路径不被临时家具占用。</li>
+        <li><span data-notation="underline">通道连续，无障碍路径不被临时家具占用。</span></li>
       </ul>
     </section>
 
@@ -456,7 +457,7 @@
           </tbody>
         </table>
       </div>
-      <p><strong>推荐 B。</strong>减少 6 个固定阅读位，换取日常安静阅读与周末交流可同时进行。<span data-notation="highlight">吸声帘不能保证完全隔音，活动时仍需限制音量。</span></p>
+      <p><strong>推荐 B。</strong><span data-notation="underline">减少 6 个固定阅读位，换取日常安静阅读与周末交流可同时进行。</span><span data-notation="highlight">吸声帘不能保证完全隔音，活动时仍需限制音量。</span></p>
     </section>
 
     <section id="sec-space" aria-labelledby="h-space">
@@ -525,7 +526,7 @@
           </tfoot>
         </table>
       </div>
-      <p>空间关系：入口 → 借还区 → 通道 → 安静阅读区；交流区位于入口侧，避免活动人流穿过安静区。以下面积是功能预算，不是按比例测绘的施工图。</p>
+      <p>空间关系：入口 → 借还区 → 通道 → 安静阅读区；<span data-notation="underline">交流区位于入口侧，避免活动人流穿过安静区。</span>以下面积是功能预算，不是按比例测绘的施工图。</p>
     </section>
 
     <section id="sec-flow" aria-labelledby="h-flow">
@@ -533,7 +534,7 @@
       <ol class="steps">
         <li>到达入口，查看座位和活动安排。</li>
         <li>日常阅读直接进入安静区；活动参与者在入口侧交流区签到。</li>
-        <li>借书由工作人员确认，归还放入归还区，不直接混回书架。</li>
+        <li><span data-notation="underline">借书由工作人员确认，归还放入归还区，不直接混回书架。</span></li>
         <li>闭馆前 15 分钟通知读者，检查借还记录与通道。</li>
       </ol>
     </section>
@@ -543,9 +544,9 @@
       <ul>
         <li>墙面：低反光的浅灰白，避免阅读时产生眩光。</li>
         <li>桌面：浅色木纹，易清洁，不采用高光漆。</li>
-        <li>导视：深蓝文字搭配清晰箭头，不仅依赖颜色区分区域。</li>
+        <li>导视：<span data-notation="underline">深蓝文字搭配清晰箭头，不仅依赖颜色区分区域</span>。</li>
         <li>吸声：优先处理交流区；正式选型前确认清洁、阻燃与维护要求。</li>
-        <li>照明：阅读面照度和色温交由专项设计确认，不以装饰灯代替任务照明。</li>
+        <li>照明：<span data-notation="underline">阅读面照度和色温交由专项设计确认，不以装饰灯代替任务照明</span>。</li>
       </ul>
     </section>
 
@@ -739,7 +740,7 @@ SOFTWARE.
           entry.annotation = RoughNotation.annotate(element, {
             type, animate: false, multiline: true, iterations: 1,
             color: stroke,
-            padding: type === 'circle' ? 3 : 1, strokeWidth: 1.5
+            padding: type === 'circle' ? 3 : 1, strokeWidth: type === 'circle' ? 2.5 : 3
           });
           entry.svg = type === 'highlight' ? element.previousElementSibling : element.nextElementSibling;
           entry.svg.dataset.enhancement = 'notation';

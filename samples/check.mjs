@@ -46,7 +46,7 @@ async function waitFor(expression) {
 async function navigate(url, scripts = true) {
   await send('Page.navigate', { url: url.href });
   await waitFor(`location.href === ${JSON.stringify(url.href)} && document.readyState === 'complete'`);
-  if (scripts) await waitFor(`document.querySelectorAll('.notation-ready').length === 5`);
+  if (scripts) await waitFor(`document.querySelector('[data-notation]') && document.querySelectorAll('.notation-ready').length === document.querySelectorAll('[data-notation]').length`);
   await delay(650);
 }
 async function viewport(width, height = 844, density = 1) {
@@ -124,9 +124,8 @@ async function state(page, name) {
   const dimensions = await evaluate(`({width:innerWidth,scroll:document.documentElement.scrollWidth})`);
   assert(dimensions.scroll <= dimensions.width + 1, `${page}/${name}: horizontal overflow`);
   const marks = await evaluate(geometry);
-  assert.equal(marks.length, 5);
   assert(marks.every(m => m.valid && m.paths > 0), `${page}/${name}: ${JSON.stringify(marks)}`);
-  assert.equal(await evaluate(`document.querySelectorAll('.rough-annotation').length`), 5);
+  assert.equal(await evaluate(`document.querySelectorAll('.rough-annotation').length`), marks.length);
   return { name, dimensions, marks };
 }
 function luminance(rgb) {
@@ -256,8 +255,8 @@ try {
     assert.deepEqual(await evaluate(sourceAtoms),expected,`${name}: no-script source`);
     assert(await evaluate(`[...document.querySelectorAll('[data-notation]')].every(e=>getComputedStyle(e).textDecorationLine==='underline' || getComputedStyle(e).backgroundColor!=='rgba(0, 0, 0, 0)')`));
     assert.equal(digest(await read(`${name}.md`)),digest(originals.get(name)));
-    results.push({name,sourceAtoms:expected.length,annotations:5,highlightContrast:contrast,states,inputSHA256:digest(originals.get(name))});
-    console.log(`PASS ${name}: ${expected.length} source atoms, 5 annotations, ${states.length} layouts, offline, print, no-script.`);
+    results.push({name,sourceAtoms:expected.length,annotations:states[0].marks.length,highlightContrast:contrast,states,inputSHA256:digest(originals.get(name))});
+    console.log(`PASS ${name}: ${expected.length} source atoms, ${states[0].marks.length} annotations, ${states.length} layouts, offline, print, no-script.`);
   }
   assert.deepEqual(errors,[]);assert.deepEqual(remoteRequests,[]);
   await writeFile(join(output,'results.json'),JSON.stringify({results,errors,remoteRequests},null,2));

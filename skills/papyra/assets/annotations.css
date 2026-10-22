@@ -6,6 +6,7 @@
 [data-notation] {
   text-decoration: underline;
   text-decoration-color: var(--notation-color);
+  text-decoration-thickness: 3px;
   text-underline-offset: .18em;
 }
 [data-notation="highlight"] {
